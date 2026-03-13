@@ -141,7 +141,7 @@ const Typewriter = ({ words }) => {
   }, [text, isDeleting, loopNum, typingSpeed, words]);
 
   return (
-    <span className="text-7xl md:text-9xl font-black text-rose-950 mb-6 drop-shadow-sm tracking-tighter min-h-[1em] block">
+    <span className="text-7xl md:text-9xl font-black text-rose-950 mb-6 drop-shadow-sm tracking-tighter block">
       To {text}<span className="animate-blink font-light text-rose-400">|</span>
     </span>
   );
@@ -744,7 +744,7 @@ const ScrollReminder = () => {
 };
 
 export default function App() {
-  const [hasStarted, setHasStarted] = useState(false);
+  const [appStep, setAppStep] = useState(0); // 0: Pre-intro, 1: Intro (Photos), 2: Main Site
   const [showSlideshow, setShowSlideshow] = useState(false);
   const [hasOpenedMemoryLane, setHasOpenedMemoryLane] = useState(false);
   const [giftRevealed, setGiftRevealed] = useState(false);
@@ -753,19 +753,27 @@ export default function App() {
 
   const globalAudioRef = useRef(null);
 
-  // Handle global background music ("udaarian")
+  // Pause audio when slideshow opens, resume when it closes
   useEffect(() => {
-    if (hasStarted && !showSlideshow && globalAudioRef.current) {
-      globalAudioRef.current.volume = 0.3; // Keep it slightly softer for background reading
-      globalAudioRef.current.play().catch(e => console.log("Global audio play blocked", e));
-    } else if (showSlideshow && globalAudioRef.current) {
-      // Pause global audio when slideshow is open
+    if (!globalAudioRef.current) return;
+    
+    if (showSlideshow) {
       globalAudioRef.current.pause();
+    } else if (appStep > 0) { // Music should be playing if we are past step 0
+      globalAudioRef.current.play().catch(() => {});
     }
-  }, [hasStarted, showSlideshow]);
+  }, [showSlideshow, appStep]);
 
-  const handleStart = () => {
-    setHasStarted(true);
+  const handlePreIntroClick = () => {
+    if (globalAudioRef.current) {
+      globalAudioRef.current.volume = 0.3;
+      globalAudioRef.current.play().catch(e => console.log("Audio blocked by browser policy", e));
+    }
+    setAppStep(1);
+  };
+
+  const handleIntroClick = () => {
+    setAppStep(2);
   };
 
   const revealGift = () => {
@@ -816,80 +824,103 @@ export default function App() {
       title: "Why I Love You, Jaan",
       icon: <Star className="w-8 h-8 md:w-10 md:h-10 text-white" fill="currentColor" />,
       image: ASSETS.images.saree,
-      content: `I love your smile. I love the way you look at me, as if speaking directly with your eyes. I love how you dress up for me—especially in a beautiful saree. But most of all, I love how easy it is to be around you. You are my safe space and my best friend.`,
+      content: `I love your smile. I love the way you look at me, as if speaking directly with your eyes. I love how you dress up for me, especially in a beautiful saree. But most of all, I love how easy it is to be around you. You are my safe space and my best friend.`,
     }
   ];
 
-  if (!hasStarted) {
-    return (
-      <div className="min-h-screen bg-stone-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-        <style dangerouslySetInnerHTML={{__html: `
-          @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap');
-          .heart-beat { animation: heartbeat 1.5s infinite; }
-          @keyframes heartbeat {
-            0%, 28%, 70% { transform: scale(1); }
-            14%, 42% { transform: scale(1.1); }
-          }
-
-          /* Cinematic Background Crossfade Animation */
-          @keyframes cinematic-fade {
-            0% { opacity: 0; transform: scale(1); }
-            10% { opacity: 0.6; }
-            20% { opacity: 0.6; transform: scale(1.05); }
-            30% { opacity: 0; transform: scale(1.1); }
-            100% { opacity: 0; transform: scale(1.1); }
-          }
-        `}} />
-
-        {/* Fading Background Photos */}
-        <div className="absolute inset-0 z-0">
-          {ASSETS.introImages.map((img, index) => (
-            <div 
-              key={`intro-bg-${index}`}
-              className="absolute inset-0 bg-cover bg-center opacity-0 animate-[cinematic-fade_24s_infinite]"
-              style={{
-                backgroundImage: `url(${img})`,
-                /* A negative offset fast-forwards the first image so it starts perfectly visible! */
-                animationDelay: `${(index * 6) - 2.4}s` 
-              }}
-            />
-          ))}
-          {/* Dark Overlay to make sure text is still very readable */}
-          <div className="absolute inset-0 bg-stone-950/70 pointer-events-none" />
-        </div>
-
-        <div onClick={handleStart} className="cursor-pointer group relative z-10 transform transition duration-500 hover:scale-105">
-          <div className="bg-white/95 backdrop-blur-xl p-10 md:p-14 rounded-3xl shadow-[0_0_60px_rgba(251,113,133,0.3)] border border-rose-200/50 text-center max-w-sm w-full">
-            <div className="bg-rose-100 w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-8 group-hover:bg-rose-200 transition-colors shadow-inner">
-              <Heart className="w-14 h-14 text-rose-500 heart-beat" fill="currentColor" />
-            </div>
-            <h1 className="text-5xl text-rose-900 mb-3" style={{ fontFamily: "'Caveat', cursive" }}>For My Jaan</h1>
-            <p className="text-rose-400 font-bold uppercase tracking-[0.3em] text-xs">Tap to open</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-stone-50 text-gray-800 overflow-x-hidden relative selection:bg-rose-200 selection:text-rose-900 flex flex-col">
-      
-      {/* Global Background Audio */}
+    <>
+      {/* Global Background Audio - Rendered at the root so it persists and plays seamlessly across screens */}
       <audio ref={globalAudioRef} src={ASSETS.songUrl} loop />
 
-      {/* Background Particles globally overlayed */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden mix-blend-multiply">
-        {[...Array(20)].map((_, i) => (
-          <FloatingParticle key={i} delay={Math.random() * 5} left={Math.random() * 100} size={15 + Math.random() * 15} duration={15 + Math.random() * 15} />
-        ))}
-      </div>
+      {appStep === 0 && (
+        <div 
+          className="min-h-screen bg-stone-950 flex flex-col items-center justify-center p-6 relative overflow-hidden text-center cursor-pointer select-none"
+          onClick={handlePreIntroClick}
+        >
+          <style dangerouslySetInnerHTML={{__html: `
+            @keyframes text-fade-in {
+              0% { opacity: 0; transform: translateY(20px); }
+              100% { opacity: 1; transform: translateY(0); }
+            }
+            .animate-text-1 { animation: text-fade-in 1.5s ease-out 0.5s forwards; }
+            .animate-text-2 { animation: text-fade-in 1.5s ease-out 2.5s forwards; }
+            .animate-text-3 { animation: text-fade-in 1.5s ease-out 4.5s forwards; }
+            .animate-text-4 { animation: text-fade-in 1.5s ease-out 6.5s forwards; }
+          `}} />
+          
+          <div className="max-w-2xl mx-auto font-medium leading-relaxed space-y-8 text-3xl md:text-5xl" style={{ fontFamily: "'Caveat', cursive" }}>
+            <p className="text-stone-300 opacity-0 animate-text-1">Hey Kajori...</p>
+            <p className="text-stone-300 opacity-0 animate-text-2">I know I can't be there with you today.</p>
+            <p className="text-rose-300 opacity-0 animate-text-3">But I hope you like this little surprise. ❤️</p>
+          </div>
 
-      {/* The Central "Story Thread" Line integrating the whole site */}
-      <div 
-        className="hidden md:block absolute top-[100vh] bottom-[20vh] left-1/2 w-px border-l-2 border-dashed border-rose-300/60 -translate-x-1/2 z-0 pointer-events-none" 
-        style={{ maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }}
-      />
+          <button className="absolute bottom-16 text-rose-400/60 uppercase tracking-[0.3em] text-xs font-bold opacity-0 animate-text-4 animate-pulse">
+            [ Tap anywhere to continue ]
+          </button>
+        </div>
+      )}
 
+      {appStep === 1 && (
+        <div className="min-h-screen bg-stone-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+          <style dangerouslySetInnerHTML={{__html: `
+            @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap');
+            .heart-beat { animation: heartbeat 1.5s infinite; }
+            @keyframes heartbeat {
+              0%, 28%, 70% { transform: scale(1); }
+              14%, 42% { transform: scale(1.1); }
+            }
+
+            /* Cinematic Background Crossfade Animation */
+            @keyframes cinematic-fade {
+              0% { opacity: 0; transform: scale(1); }
+              10% { opacity: 0.6; }
+              20% { opacity: 0.6; transform: scale(1.05); }
+              30% { opacity: 0; transform: scale(1.1); }
+              100% { opacity: 0; transform: scale(1.1); }
+            }
+          `}} />
+
+          {/* Fading Background Photos */}
+          <div className="absolute inset-0 z-0">
+            {ASSETS.introImages.map((img, index) => (
+              <div 
+                key={`intro-bg-${index}`}
+                className="absolute inset-0 bg-cover bg-center opacity-0 animate-[cinematic-fade_24s_infinite]"
+                style={{
+                  backgroundImage: `url(${img})`,
+                  /* A negative offset fast-forwards the first image so it starts perfectly visible! */
+                  animationDelay: `${(index * 6) - 2.4}s` 
+                }}
+              />
+            ))}
+            {/* Dark Overlay to make sure text is still very readable */}
+            <div className="absolute inset-0 bg-stone-950/70 pointer-events-none" />
+          </div>
+
+          <div onClick={handleIntroClick} className="cursor-pointer group relative z-10 transform transition duration-500 hover:scale-105">
+            <div className="bg-white/95 backdrop-blur-xl p-10 md:p-14 rounded-3xl shadow-[0_0_60px_rgba(251,113,133,0.3)] border border-rose-200/50 text-center max-w-sm w-full">
+              <div className="bg-rose-100 w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-8 group-hover:bg-rose-200 transition-colors shadow-inner">
+                <Heart className="w-14 h-14 text-rose-500 heart-beat" fill="currentColor" />
+              </div>
+              <h1 className="text-5xl text-rose-900 mb-3" style={{ fontFamily: "'Caveat', cursive" }}>For My Jaan</h1>
+              <p className="text-rose-400 font-bold uppercase tracking-[0.3em] text-xs">Tap to open</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {appStep === 2 && (
+        <div className="min-h-screen bg-stone-50 text-gray-800 overflow-x-hidden relative selection:bg-rose-200 selection:text-rose-900 flex flex-col">
+          
+          {/* Background Particles globally overlayed */}
+          <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden mix-blend-multiply">
+            {[...Array(20)].map((_, i) => (
+              <FloatingParticle key={i} delay={Math.random() * 5} left={Math.random() * 100} size={15 + Math.random() * 15} duration={15 + Math.random() * 15} />
+            ))}
+          </div>
+
+          {/* The Central "Story Thread" Line integrating the whole site */}
       {giftRevealed && <Confetti />}
 
       {/* Fixed Scroll Reminder */}
@@ -975,9 +1006,6 @@ export default function App() {
           <div id="memory-btn-container" className="relative flex justify-center mt-6 mb-16">
             {!hasOpenedMemoryLane && (
               <div className="absolute bottom-[110%] right-0 md:-right-12 transform translate-y-2 pointer-events-none z-20 flex flex-col items-center animate-[bounce-slight_3s_ease-in-out_infinite]">
-                <CloudBubble className="mb-2">
-                   Click Me!!!
-                </CloudBubble>
                 <svg width="40" height="55" viewBox="0 0 60 100" fill="none" className="stroke-stone-700 ml-10" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M 30 0 C 50 20, -10 30, 10 50 C 30 70, 50 30, 20 70 C 5 90, 5 90, 5 90" />
                   <path d="M -5 75 L 5 90 L 20 85" />
@@ -1028,7 +1056,7 @@ export default function App() {
               </div>
               <h2 className="text-6xl md:text-8xl text-rose-200 mb-8 drop-shadow-lg font-bold" style={{ fontFamily: "'Caveat', cursive" }}>The Long Drive Scare</h2>
               <p className="text-indigo-200/90 text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mx-auto">
-                Remember when we were parked after cricket coaching? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
+                Remember when we were parked outside of VET Ground? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
               </p>
             </div>
             
@@ -1223,6 +1251,8 @@ export default function App() {
         }
         .animate-siren { animation: siren 0.4s infinite; }
       `}} />
-    </div>
+        </div>
+      )}
+    </>
   );
 }
