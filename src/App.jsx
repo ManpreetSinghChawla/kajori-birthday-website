@@ -1138,7 +1138,7 @@ export default function App() {
                         ZOMATO
                       </div>
                       <img 
-                        src="/images/zomato.png" 
+                        src="/images/zomato.jpg" 
                         alt="Zomato" 
                         className="h-10 mx-auto mb-10 object-contain drop-shadow-sm"
                       />
