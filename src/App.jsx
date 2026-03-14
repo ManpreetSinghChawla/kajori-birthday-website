@@ -46,8 +46,8 @@ const StarryBackground = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B1A] via-[#111133] to-[#0B0B1A] opacity-95" />
-      {stars.map((star) => (
-        <div key={star.id} className="absolute bg-white rounded-full animate-twinkle" style={star} />
+      {stars.map(({ id, ...styleProps }) => (
+        <div key={id} className="absolute bg-white rounded-full animate-twinkle" style={styleProps} />
       ))}
       <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
       <div className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-purple-500/5 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
@@ -247,8 +247,9 @@ const JourneySlideshowOverlay = ({ events, onClose }) => {
       <div key={currentIndex} className="relative w-full max-w-5xl flex flex-col md:flex-row bg-white rounded-2xl md:rounded-[2.5rem] overflow-hidden shadow-[0_0_60px_rgba(225,29,72,0.15)] animate-[scale-in_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
         <div className="absolute top-0 left-0 h-1.5 bg-rose-500 z-50 animate-[progress_15s_linear_forwards]" />
 
-        <div className="w-full md:w-1/2 h-[300px] md:h-[600px] relative shrink-0 bg-stone-100">
-           <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+        {/* IMAGE CONTAINER FIX: Using relative flex container + absolute image to prevent ANY empty space */}
+        <div className="w-full md:w-1/2 relative min-h-[300px] md:min-h-[600px] shrink-0 bg-stone-100 flex">
+           <img src={slide.image} alt={slide.title} className="absolute inset-0 w-full h-full object-cover" />
            <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent md:hidden" />
         </div>
 
@@ -567,7 +568,7 @@ const PoliceEscapeGame = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[160] bg-stone-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-2 md:p-4 animate-fade-in">
+    <div className="fixed inset-0 z-[160] bg-stone-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-2 md:p-4 animate-fade-in overflow-hidden">
       
       <button 
         onClick={onClose}
@@ -576,105 +577,107 @@ const PoliceEscapeGame = ({ onClose }) => {
         <X className="w-8 h-8" />
       </button>
 
-      <div className="max-w-5xl mx-auto px-2 md:px-4 relative z-10 text-center w-full h-full max-h-[90vh] flex flex-col justify-center animate-[scale-in_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
-        <h2 className="text-4xl md:text-6xl text-rose-300 mb-2 md:mb-4 drop-shadow-md shrink-0 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>The Long Drive Scare</h2>
-        <p className="text-indigo-200 mb-4 md:mb-6 text-sm md:text-lg font-medium max-w-3xl mx-auto leading-relaxed drop-shadow-sm shrink-0">
-          Remember when we were parked in front of VET Ground? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
-        </p>
+      <div className="max-w-5xl mx-auto px-2 md:px-4 relative z-10 text-center w-full h-full max-h-[100vh] flex flex-col justify-center animate-[scale-in_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
+        <div className="overflow-y-auto custom-scrollbar flex flex-col items-center w-full py-4">
+          <h2 className="text-4xl md:text-6xl text-rose-300 mb-2 md:mb-4 drop-shadow-md shrink-0 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>The Long Drive Scare</h2>
+          <p className="text-indigo-200 mb-4 md:mb-6 text-sm md:text-lg font-medium max-w-3xl mx-auto leading-relaxed drop-shadow-sm shrink-0">
+            Remember when we were parked in front of VET Ground? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
+          </p>
 
-        {/* Game Container */}
-        <div className={`relative w-full max-w-4xl mx-auto rounded-[2rem] border-[6px] overflow-hidden shadow-2xl transition-colors duration-100 shrink min-h-[300px] ${copWarning ? 'animate-siren border-red-500 shadow-[0_0_100px_rgba(255,0,0,0.8)]' : 'bg-stone-900 border-stone-700 shadow-[0_0_50px_rgba(0,0,0,0.8)]'}`}>
-          
-          {/* Flashing Police Lights Effect */}
-          {copWarning && <div className="absolute inset-0 bg-red-600/20 animate-pulse pointer-events-none" />}
-
-          <div className="p-6 md:p-10 flex flex-col items-center relative z-10 h-full justify-center">
+          {/* Game Container */}
+          <div className={`relative w-full max-w-4xl mx-auto rounded-[2rem] border-[6px] overflow-hidden shadow-2xl transition-colors duration-100 shrink min-h-[300px] ${copWarning ? 'animate-siren border-red-500 shadow-[0_0_100px_rgba(255,0,0,0.8)]' : 'bg-stone-900 border-stone-700 shadow-[0_0_50px_rgba(0,0,0,0.8)]'}`}>
             
-            {/* Visual Screen */}
-            <div className="h-40 md:h-56 flex items-center justify-center relative w-full mb-8 bg-black/70 rounded-3xl border-2 border-white/10 overflow-hidden shadow-inner">
-               
-               {/* Pre-Warning Text Overlay */}
-               {preWarning && (
-                 <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 flex items-center justify-center bg-orange-500/90 px-6 py-2.5 rounded-full border-4 border-orange-300 shadow-[0_0_30px_rgba(249,115,22,0.8)] animate-pulse">
-                    <span className="text-xl md:text-2xl font-black text-white tracking-widest uppercase whitespace-nowrap drop-shadow-md">
-                       ⚠️ Police incoming...
-                    </span>
-                 </div>
-               )}
+            {/* Flashing Police Lights Effect */}
+            {copWarning && <div className="absolute inset-0 bg-red-600/20 animate-pulse pointer-events-none" />}
 
-               {/* Massive Police Warning Overlay */}
-               {copWarning && (
-                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-red-600/40 backdrop-blur-[2px]">
-                    <span className="text-5xl md:text-7xl font-black text-white tracking-widest uppercase drop-shadow-[0_0_30px_rgba(255,0,0,1)] animate-[bounce-slight_0.3s_ease-in-out_infinite]">🚨 POLICE! 🚨</span>
-                 </div>
-               )}
+            <div className="p-6 md:p-10 flex flex-col items-center relative z-10 h-full justify-center">
+              
+              {/* Visual Screen */}
+              <div className="h-32 md:h-56 flex items-center justify-center relative w-full mb-8 bg-black/70 rounded-3xl border-2 border-white/10 overflow-hidden shadow-inner">
+                 
+                 {/* Pre-Warning Text Overlay */}
+                 {preWarning && (
+                   <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 flex items-center justify-center bg-orange-500/90 px-6 py-2.5 rounded-full border-4 border-orange-300 shadow-[0_0_30px_rgba(249,115,22,0.8)] animate-pulse">
+                      <span className="text-xl md:text-2xl font-black text-white tracking-widest uppercase whitespace-nowrap drop-shadow-md">
+                         ⚠️ Police incoming...
+                      </span>
+                   </div>
+                 )}
 
-               {gameState === 'idle' && (
-                 <Car className="w-20 h-20 md:w-32 md:h-32 text-stone-400 opacity-80" />
-               )}
-               
-               {gameState === 'playing' && (
-                 <div className="flex flex-col items-center relative z-10">
-                   {copWarning ? (
-                     <ShieldAlert className="w-20 h-20 md:w-32 md:h-32 text-transparent" /> /* Invisible placeholder */
-                   ) : (
-                     <div className={`text-6xl md:text-8xl transition-transform duration-100 ${isPressing ? 'scale-125 animate-[bounce-slight_0.5s_ease-in-out_infinite]' : 'scale-100'}`}>
-                       {isPressing ? '👩‍❤️‍💋‍👨' : '🚗'}
-                     </div>
-                   )}
-                   {isPressing && !copWarning && (
-                     <Heart className="absolute -top-6 -right-6 md:-top-8 md:-right-8 w-10 h-10 text-rose-500 animate-float-up fill-current" />
-                   )}
-                 </div>
-               )}
+                 {/* Massive Police Warning Overlay */}
+                 {copWarning && (
+                   <div className="absolute inset-0 z-20 flex items-center justify-center bg-red-600/40 backdrop-blur-[2px]">
+                      <span className="text-5xl md:text-7xl font-black text-white tracking-widest uppercase drop-shadow-[0_0_30px_rgba(255,0,0,1)] animate-[bounce-slight_0.3s_ease-in-out_infinite]">🚨 POLICE! 🚨</span>
+                   </div>
+                 )}
 
-               {gameState === 'caught' && (
-                 <div className="flex flex-col items-center z-10">
-                   <span className="text-6xl md:text-8xl mb-4">👮‍♂️🚨</span>
-                   <p className="text-red-400 font-bold tracking-widest uppercase text-sm md:text-xl drop-shadow-md">"STEP OUTSIDE OF THE CAR!"</p>
-                 </div>
-               )}
+                 {gameState === 'idle' && (
+                   <Car className="w-20 h-20 md:w-32 md:h-32 text-stone-400 opacity-80" />
+                 )}
+                 
+                 {gameState === 'playing' && (
+                   <div className="flex flex-col items-center relative z-10">
+                     {copWarning ? (
+                       <ShieldAlert className="w-20 h-20 md:w-32 md:h-32 text-transparent" /> /* Invisible placeholder */
+                     ) : (
+                       <div className={`text-6xl md:text-8xl transition-transform duration-100 ${isPressing ? 'scale-125 animate-[bounce-slight_0.5s_ease-in-out_infinite]' : 'scale-100'}`}>
+                         {isPressing ? '👩‍❤️‍💋‍👨' : '🚗'}
+                       </div>
+                     )}
+                     {isPressing && !copWarning && (
+                       <Heart className="absolute -top-6 -right-6 md:-top-8 md:-right-8 w-10 h-10 text-rose-500 animate-float-up fill-current" />
+                     )}
+                   </div>
+                 )}
 
-               {gameState === 'won' && (
-                 <div className="flex flex-col items-center z-10">
-                   <span className="text-6xl md:text-8xl mb-4">🥰🎉</span>
-                   <p className="text-rose-400 font-bold tracking-widest uppercase text-sm md:text-xl drop-shadow-md">You safely survived the drive!</p>
-                 </div>
-               )}
-            </div>
+                 {gameState === 'caught' && (
+                   <div className="flex flex-col items-center z-10">
+                     <span className="text-6xl md:text-8xl mb-4">👮‍♂️🚨</span>
+                     <p className="text-red-400 font-bold tracking-widest uppercase text-sm md:text-xl drop-shadow-md">"STEP OUTSIDE OF THE CAR!"</p>
+                   </div>
+                 )}
 
-            {/* Passion Progress Bar */}
-            <div className="w-full bg-stone-950 rounded-full h-8 mb-8 border-2 border-stone-700 relative overflow-hidden shadow-inner">
-               <div 
-                 className={`h-full transition-all duration-75 ${score === 100 ? 'bg-green-500' : 'bg-gradient-to-r from-rose-600 to-pink-500'}`} 
-                 style={{ width: `${score}%` }} 
-               />
-               <span className="absolute inset-0 flex items-center justify-center text-xs md:text-sm font-black tracking-widest text-white/80 uppercase drop-shadow-md">
-                 Passion Meter
-               </span>
-            </div>
-
-            {/* Controls */}
-            {gameState === 'idle' || gameState === 'caught' || gameState === 'won' ? (
-              <button 
-                onClick={startGame}
-                className="bg-rose-500 text-white px-8 py-4 md:px-12 md:py-5 rounded-full font-bold hover:bg-rose-600 transition-all active:scale-95 shadow-[0_0_30px_rgba(244,63,94,0.4)] w-full md:w-auto text-lg md:text-2xl tracking-wider"
-              >
-                {gameState === 'idle' ? 'Start Game' : 'Try Again'}
-              </button>
-            ) : (
-              <div className="w-full flex flex-col items-center gap-2 md:gap-4 shrink-0">
-                <div
-                  className={`w-full py-4 md:py-6 rounded-2xl font-black text-lg md:text-2xl tracking-widest uppercase transition-all select-none shadow-2xl border-b-8 ${copWarning ? 'bg-red-600 text-white border-red-800 scale-[0.98]' : isPressing ? 'bg-rose-400 text-white border-rose-600 scale-[0.98]' : 'bg-rose-500 text-white border-rose-700'}`}
-                >
-                  {copWarning ? "LET GO NOW!!!" : "[ HOLD SPACEBAR ]"}
-                </div>
-                <p className={`text-sm md:text-lg font-bold mt-2 ${copWarning ? 'text-red-400 animate-pulse' : 'text-stone-400'}`}>
-                  Let go <span className={`${copWarning ? 'text-white bg-red-600' : 'text-red-400 bg-red-400/10'} px-2 py-0.5 rounded`}>IMMEDIATELY</span> if you see police!
-                </p>
+                 {gameState === 'won' && (
+                   <div className="flex flex-col items-center z-10">
+                     <span className="text-6xl md:text-8xl mb-4">🥰🎉</span>
+                     <p className="text-rose-400 font-bold tracking-widest uppercase text-sm md:text-xl drop-shadow-md">You safely survived the drive!</p>
+                   </div>
+                 )}
               </div>
-            )}
 
+              {/* Passion Progress Bar */}
+              <div className="w-full bg-stone-950 rounded-full h-8 mb-8 border-2 border-stone-700 relative overflow-hidden shadow-inner">
+                 <div 
+                   className={`h-full transition-all duration-75 ${score === 100 ? 'bg-green-500' : 'bg-gradient-to-r from-rose-600 to-pink-500'}`} 
+                   style={{ width: `${score}%` }} 
+                 />
+                 <span className="absolute inset-0 flex items-center justify-center text-xs md:text-sm font-black tracking-widest text-white/80 uppercase drop-shadow-md">
+                   Passion Meter
+                 </span>
+              </div>
+
+              {/* Controls */}
+              {gameState === 'idle' || gameState === 'caught' || gameState === 'won' ? (
+                <button 
+                  onClick={startGame}
+                  className="bg-rose-500 text-white px-8 py-4 md:px-12 md:py-5 rounded-full font-bold hover:bg-rose-600 transition-all active:scale-95 shadow-[0_0_30px_rgba(244,63,94,0.4)] w-full md:w-auto text-lg md:text-2xl tracking-wider"
+                >
+                  {gameState === 'idle' ? 'Start Game' : 'Try Again'}
+                </button>
+              ) : (
+                <div className="w-full flex flex-col items-center gap-2 md:gap-4 shrink-0">
+                  <div
+                    className={`w-full py-4 md:py-6 rounded-2xl font-black text-lg md:text-2xl tracking-widest uppercase transition-all select-none shadow-2xl border-b-8 ${copWarning ? 'bg-red-600 text-white border-red-800 scale-[0.98]' : isPressing ? 'bg-rose-400 text-white border-rose-600 scale-[0.98]' : 'bg-rose-500 text-white border-rose-700'}`}
+                  >
+                    {copWarning ? "LET GO NOW!!!" : "[ HOLD SPACEBAR ]"}
+                  </div>
+                  <p className={`text-sm md:text-lg font-bold mt-2 ${copWarning ? 'text-red-400 animate-pulse' : 'text-stone-400'}`}>
+                    Let go <span className={`${copWarning ? 'text-white bg-red-600' : 'text-red-400 bg-red-400/10'} px-2 py-0.5 rounded`}>IMMEDIATELY</span> if you see police!
+                  </p>
+                </div>
+              )}
+
+            </div>
           </div>
         </div>
       </div>
@@ -752,6 +755,31 @@ export default function App() {
   const [showGame, setShowGame] = useState(false);
 
   const globalAudioRef = useRef(null);
+  const [isAudioUnlocked, setIsAudioUnlocked] = useState(false);
+
+  // Handle global background music - Starts immediately upon any interaction
+  useEffect(() => {
+    const unlockAudio = () => {
+      if (!isAudioUnlocked && globalAudioRef.current) {
+        globalAudioRef.current.volume = 0.3;
+        globalAudioRef.current.play()
+          .then(() => setIsAudioUnlocked(true))
+          .catch(e => console.log("Audio blocked by browser policy", e));
+      }
+    };
+
+    // Listen for any tap or click anywhere on the page to unlock the audio
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('touchstart', unlockAudio);
+    
+    // Try playing immediately (might work if browser has cached permissions)
+    unlockAudio();
+
+    return () => {
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('touchstart', unlockAudio);
+    };
+  }, [isAudioUnlocked]);
 
   // Pause audio when slideshow opens, resume when it closes
   useEffect(() => {
@@ -759,15 +787,15 @@ export default function App() {
     
     if (showSlideshow) {
       globalAudioRef.current.pause();
-    } else if (appStep > 0) { // Music should be playing if we are past step 0
+    } else if (isAudioUnlocked && appStep > 0) {
       globalAudioRef.current.play().catch(() => {});
     }
-  }, [showSlideshow, appStep]);
+  }, [showSlideshow, isAudioUnlocked, appStep]);
 
   const handlePreIntroClick = () => {
-    if (globalAudioRef.current) {
+    if (globalAudioRef.current && !isAudioUnlocked) {
       globalAudioRef.current.volume = 0.3;
-      globalAudioRef.current.play().catch(e => console.log("Audio blocked by browser policy", e));
+      globalAudioRef.current.play().then(() => setIsAudioUnlocked(true)).catch(() => {});
     }
     setAppStep(1);
   };
@@ -921,336 +949,351 @@ export default function App() {
           </div>
 
           {/* The Central "Story Thread" Line integrating the whole site */}
-      {giftRevealed && <Confetti />}
+          <div 
+            className="hidden md:block absolute top-[100vh] bottom-[20vh] left-1/2 w-px border-l-2 border-dashed border-rose-300/60 -translate-x-1/2 z-0 pointer-events-none" 
+            style={{ maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }}
+          />
 
-      {/* Fixed Scroll Reminder */}
-      {!hasOpenedMemoryLane && <ScrollReminder />}
+          {giftRevealed && <Confetti />}
 
-      {/* Story Popup Modal */}
-      {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-[110] bg-rose-950/70 backdrop-blur-md p-4 animate-fade-in">
-          <div className="bg-white rounded-[2rem] p-10 max-w-md w-full shadow-2xl transform animate-bounce-in relative text-center border-4 border-rose-100">
-            <button 
-              onClick={() => setShowPopup(false)}
-              className="absolute top-5 right-5 text-stone-400 hover:text-stone-600 transition bg-stone-100 p-2 rounded-full"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-              <Gift className="w-10 h-10 text-rose-500" />
-            </div>
-            <h3 className="text-4xl text-rose-900 mb-4 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>Surprise! 🎉</h3>
-            <p className="text-lg text-stone-600 font-medium leading-relaxed mb-6">
-              "Nimma delivery bandide madam!" 🍫<br/><br/>
-              Now you can finally order that Death by Chocolate... or maybe get some non-veg Burger King this time 😉.
-            </p>
-            <p className="text-2xl text-rose-500 font-bold mb-8" style={{ fontFamily: "'Caveat', cursive" }}>Happy Birthday, beautiful! ❤️</p>
-            <button 
-              onClick={() => setShowPopup(false)}
-              className="bg-rose-500 text-white px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(244,63,94,0.3)] hover:bg-rose-600 active:scale-95 transition-all w-full text-lg"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+          {/* Fixed Scroll Reminder */}
+          {!hasOpenedMemoryLane && <ScrollReminder />}
 
-      {/* Hero Section */}
-      <header className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-10 bg-stone-50 z-10">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-[0.12]"
-          style={{ backgroundImage: `url(${ASSETS.images.hero})`, backgroundAttachment: 'fixed' }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-stone-50/70 via-stone-50/50 to-stone-50" />
-        
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center mt-[-5vh]">
-          <div className="animate-[fade-in-up_1s_ease-out_forwards]">
-            <span className="inline-block py-2 px-8 rounded-full bg-white/90 backdrop-blur-sm text-rose-600 font-bold tracking-[0.25em] text-xs mb-10 shadow-sm border border-rose-100">
-              MARCH 15, 2026
-            </span>
-            <h2 className="text-4xl md:text-6xl text-rose-500 mb-4 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>
-              Happy 25th Birthday
-            </h2>
-            
-            <div className="h-24 md:h-32 flex items-center justify-center">
-               <Typewriter words={["Kajori", "My Jaan", "My Love"]} />
-            </div>
-            
-            <p className="text-lg md:text-2xl text-stone-600 mb-8 max-w-2xl mx-auto leading-relaxed font-medium mt-6 px-4">
-              From swiping right and terrible Kannada translations, to airport jumping and parking lot conversations. Here is the story of us.
-            </p>
-          </div>
-
-          <div className="animate-[fade-in-up_1.5s_ease-out_forwards] opacity-0 w-full px-4">
-            <TimeCounter />
-          </div>
-
-          <div className="mt-24 animate-bounce text-rose-400 opacity-80">
-            <ChevronDown className="w-12 h-12" />
-          </div>
-        </div>
-      </header>
-
-      {/* Main Flow: Journey -> Mood -> Bridge -> Movie -> Game */}
-      <div className="w-full relative z-10 flex flex-col bg-stone-50">
-        
-        {/* Story Timeline Button Section */}
-        <main className="w-full px-4 py-28 md:py-40 flex flex-col items-center justify-center relative">
-          <div className="text-center mb-16 relative bg-stone-50/90 backdrop-blur-sm px-10 py-8 rounded-[3rem] shadow-sm border border-stone-100">
-            <h2 className="text-6xl md:text-7xl text-rose-900 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>Our Journey</h2>
-            <div className="h-1.5 w-32 bg-rose-300 mx-auto mt-8 rounded-full opacity-60" />
-            <p className="mt-8 text-stone-500 font-medium text-xl">A look back at all our beautiful moments.</p>
-          </div>
-
-          {/* Absolute "Click Me!!!" Cloud Pointing Directly at the Button */}
-          <div id="memory-btn-container" className="relative flex justify-center mt-6 mb-16">
-            {!hasOpenedMemoryLane && (
-              <div className="absolute bottom-[110%] right-0 md:-right-12 transform translate-y-2 pointer-events-none z-20 flex flex-col items-center animate-[bounce-slight_3s_ease-in-out_infinite]">
-                <svg width="40" height="55" viewBox="0 0 60 100" fill="none" className="stroke-stone-700 ml-10" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M 30 0 C 50 20, -10 30, 10 50 C 30 70, 50 30, 20 70 C 5 90, 5 90, 5 90" />
-                  <path d="M -5 75 L 5 90 L 20 85" />
-                </svg>
-              </div>
-            )}
-
-            <button 
-              onClick={() => {
-                setShowSlideshow(true);
-                setHasOpenedMemoryLane(true);
-            }}
-              className="bg-rose-500 text-white px-12 py-6 rounded-full font-bold text-xl md:text-3xl hover:bg-rose-600 transition-all shadow-[0_0_40px_rgba(225,29,72,0.3)] hover:shadow-[0_0_50px_rgba(225,29,72,0.5)] flex items-center gap-5 transform hover:scale-105 active:scale-95 relative z-10"
-            >
-              <Play className="w-10 h-10 fill-current" />
-              Open The Memory Lane
-            </button>
-          </div>
-        </main>
-
-        <MoodSection />
-
-        {/* --- NIGHT SKY WRAPPER --- */}
-        <div className="relative w-full overflow-hidden flex flex-col">
-          <StarryBackground />
-          
-          {/* Smooth Fade-in for the stars from the white background */}
-          <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-stone-50 to-transparent pointer-events-none z-0" />
-
-          {/* Smooth Cinematic Bridge to Darkness */}
-          <div className="w-full pt-48 pb-12 relative z-10 flex items-center justify-center text-center px-4">
-            <p className="text-4xl md:text-6xl text-stone-300 font-medium drop-shadow-xl leading-snug" style={{ fontFamily: "'Caveat', cursive" }}>
-              But through the highs and the lows... <br/>
-              <span className="text-indigo-300 mt-6 inline-block drop-shadow-[0_0_15px_rgba(165,180,252,0.5)] font-bold">every single moment led up to this night.</span>
-            </p>
-          </div>
-
-          {/* Movie Section */}
-          <div className="w-full relative z-10 pt-10 pb-20 flex flex-col items-center">
-            <MovieProposalSection />
-          </div>
-
-          {/* MASSIVE Dedicated Game Section */}
-          <div className="w-full relative z-10 pt-24 pb-40 flex flex-col items-center bg-gradient-to-b from-transparent via-[#130f1c] to-transparent">
-            <div className="text-center max-w-4xl px-4 mb-16">
-              <div className="inline-block p-6 bg-rose-500/10 rounded-full mb-8 backdrop-blur-md border border-rose-500/20 shadow-[0_0_30px_rgba(225,29,72,0.1)]">
-                 <ShieldAlert className="w-16 h-16 text-rose-400 animate-pulse" />
-              </div>
-              <h2 className="text-6xl md:text-8xl text-rose-200 mb-8 drop-shadow-lg font-bold" style={{ fontFamily: "'Caveat', cursive" }}>The Long Drive Scare</h2>
-              <p className="text-indigo-200/90 text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mx-auto">
-                Remember when we were parked outside of VET Ground? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
-              </p>
-            </div>
-            
-            <button 
-              onClick={() => setShowGame(true)}
-              className="bg-rose-600 text-white px-16 py-8 rounded-full font-black text-2xl md:text-4xl hover:bg-rose-500 transition-all shadow-[0_0_60px_rgba(225,29,72,0.6)] hover:shadow-[0_0_80px_rgba(225,29,72,0.8)] flex items-center gap-6 transform hover:scale-105 active:scale-95 border-4 md:border-[6px] border-rose-400/30 group"
-            >
-              <Car className="w-12 h-12 md:w-14 md:h-14 fill-current group-hover:animate-bounce-slight" />
-              PLAY MINI-GAME
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Gift Section (Fades from deep theater stone into rich red Zomato theme) */}
-      <section className="py-40 bg-gradient-to-b from-[#0B0B1A] to-rose-950 text-white text-center px-4 relative overflow-hidden z-10">
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none mix-blend-overlay">
-          <div className="absolute -top-1/4 -right-1/4 w-[600px] h-[600px] bg-red-800 rounded-full blur-[120px] opacity-40" />
-          <div className="absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] bg-red-800 rounded-full blur-[120px] opacity-40" />
-        </div>
-
-        <div className="max-w-4xl mx-auto relative z-10">
-          <div className="inline-block p-6 bg-white/10 rounded-full mb-10 backdrop-blur-md border border-white/20 shadow-xl">
-            <Gift className="w-14 h-14 text-rose-300 animate-bounce" />
-          </div>
-          <h2 className="text-6xl md:text-8xl font-bold mb-8 text-white drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>
-            A Little Birthday Treat!
-          </h2>
-          <p className="text-2xl text-rose-200/90 mb-20 leading-relaxed font-medium max-w-2xl mx-auto">
-            I wish I could be there to celebrate with you! But since I can't, here is something to make your day special.
-          </p>
-
-          {!giftRevealed ? (
-            <button 
-              onClick={revealGift}
-              className="bg-white text-rose-950 px-12 py-6 rounded-full font-black text-2xl hover:bg-rose-50 transition-all shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:shadow-[0_0_70px_rgba(255,255,255,0.5)] flex items-center justify-center gap-4 mx-auto transform hover:scale-110 active:scale-95"
-            >
-              <Sparkles className="w-8 h-8 text-yellow-500" />
-              Reveal Your Gift!
-            </button>
-          ) : (
-            <div className="animate-[scale-in_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
-              <div className="bg-gradient-to-br from-red-600 to-red-800 p-2 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.5)] max-w-lg mx-auto transform rotate-2 hover:rotate-0 transition-transform duration-500 cursor-pointer">
-                <div className="bg-white text-stone-800 p-12 rounded-[2rem] border-4 border-dashed border-red-200/50 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 bg-red-600 text-white px-8 py-2 rounded-bl-3xl rounded-tr-[1.5rem] font-black text-sm tracking-[0.2em] shadow-md">
-                    ZOMATO
-                  </div>
-                  <img 
-                    src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Zomato_logo.png" 
-                    alt="Zomato" 
-                    className="h-10 mx-auto mb-10 object-contain drop-shadow-sm"
-                  />
-                  <h3 className="text-6xl font-black text-stone-900 mb-3 tracking-tighter">₹2,000</h3>
-                  <p className="text-stone-500 font-bold text-lg mb-10 uppercase tracking-widest">Voucher to treat your cravings!</p>
-                  
-                  <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-inner">
-                    <p className="text-sm text-stone-400 uppercase tracking-[0.2em] mb-3 font-bold">Gift Code</p>
-                    <div className="bg-white py-3 rounded-xl border border-stone-200 shadow-sm">
-                      <p className="text-3xl font-mono font-black text-red-600 tracking-widest">JAAN-BDAY-2026</p>
-                    </div>
-                    <p className="text-sm text-stone-500 mt-4 font-bold">Apply this PIN in your Zomato App</p>
-                  </div>
+          {/* Story Popup Modal */}
+          {showPopup && (
+            <div className="fixed inset-0 flex items-center justify-center z-[110] bg-rose-950/70 backdrop-blur-md p-4 animate-fade-in">
+              <div className="bg-white rounded-[2rem] p-10 max-w-md w-full shadow-2xl transform animate-bounce-in relative text-center border-4 border-rose-100">
+                <button 
+                  onClick={() => setShowPopup(false)}
+                  className="absolute top-5 right-5 text-stone-400 hover:text-stone-600 transition bg-stone-100 p-2 rounded-full"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+                <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                  <Gift className="w-10 h-10 text-rose-500" />
                 </div>
+                <h3 className="text-4xl text-rose-900 mb-4 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>Surprise! 🎉</h3>
+                <p className="text-lg text-stone-600 font-medium leading-relaxed mb-6">
+                  "Nimma delivery bandide madam!" 🍫<br/><br/>
+                  Now you can finally order that Death by Chocolate... or maybe get some non-veg Burger King this time 😉.
+                </p>
+                <p className="text-2xl text-rose-500 font-bold mb-8" style={{ fontFamily: "'Caveat', cursive" }}>Happy Birthday, beautiful! ❤️</p>
+                <button 
+                  onClick={() => setShowPopup(false)}
+                  className="bg-rose-500 text-white px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(244,63,94,0.3)] hover:bg-rose-600 active:scale-95 transition-all w-full text-lg"
+                >
+                  Close
+                </button>
               </div>
-              <p className="mt-20 text-5xl text-rose-300 font-bold drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>
-                I love you so much. Happy Birthday. ❤️
-              </p>
             </div>
           )}
-        </div>
-      </section>
 
-      {/* Slideshow Overlay Modal */}
-      {showSlideshow && (
-        <JourneySlideshowOverlay 
-          events={timelineEvents} 
-          onClose={() => setShowSlideshow(false)} 
-        />
-      )}
+          {/* Hero Section */}
+          <header className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-10 bg-stone-50 z-10">
+            <div 
+              className="absolute inset-0 bg-cover bg-center opacity-[0.12]"
+              style={{ backgroundImage: `url(${ASSETS.images.hero})`, backgroundAttachment: 'fixed' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-stone-50/70 via-stone-50/50 to-stone-50" />
+            
+            <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center mt-[-5vh]">
+              <div className="animate-[fade-in-up_1s_ease-out_forwards]">
+                <span className="inline-block py-2 px-8 rounded-full bg-white/90 backdrop-blur-sm text-rose-600 font-bold tracking-[0.25em] text-xs mb-10 shadow-sm border border-rose-100">
+                  MARCH 15, 2026
+                </span>
+                <h2 className="text-4xl md:text-6xl text-rose-500 mb-4 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>
+                  Happy 25th Birthday
+                </h2>
+                
+                <div className="h-24 md:h-32 flex items-center justify-center">
+                   <Typewriter words={["Kajori", "My Jaan", "My Love", "My Everything"]} />
+                </div>
+                
+                <p className="text-lg md:text-2xl text-stone-600 mb-8 max-w-2xl mx-auto leading-relaxed font-medium mt-6 px-4">
+                  From swiping right and terrible Kannada translations, to airport jumping and parking lot conversations. Here is the story of us.
+                </p>
+              </div>
 
-      {/* Mini Game Overlay Modal */}
-      {showGame && (
-        <PoliceEscapeGame onClose={() => setShowGame(false)} />
-      )}
+              <div className="animate-[fade-in-up_1.5s_ease-out_forwards] opacity-0 w-full px-4">
+                <TimeCounter />
+              </div>
 
-      {/* Global utility animations */}
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes fade-in-up {
-          0% { opacity: 0; transform: translateY(30px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes scale-in {
-          0% { opacity: 0; transform: scale(0.5); }
-          100% { opacity: 1; transform: scale(1); }
-        }
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        .animate-blink { animation: blink 1s step-end infinite; }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-        .animate-float { animation: float 4s ease-in-out infinite; }
+              <div className="mt-24 animate-bounce text-rose-400 opacity-80">
+                <ChevronDown className="w-12 h-12" />
+              </div>
+            </div>
+          </header>
 
-        @keyframes confetti-fall {
-          0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-        .animate-confetti-fall { animation: confetti-fall linear forwards; }
+          {/* Main Flow: Journey -> Mood -> Bridge -> Movie -> Game */}
+          <div className="w-full relative z-10 flex flex-col bg-stone-50">
+            
+            {/* Story Timeline Button Section */}
+            <main className="w-full px-4 py-28 md:py-40 flex flex-col items-center justify-center relative">
+              <div className="text-center mb-16 relative bg-stone-50/90 backdrop-blur-sm px-10 py-8 rounded-[3rem] shadow-sm border border-stone-100">
+                <h2 className="text-6xl md:text-7xl text-rose-900 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>Our Journey</h2>
+                <div className="h-1.5 w-32 bg-rose-300 mx-auto mt-8 rounded-full opacity-60" />
+                <p className="mt-8 text-stone-500 font-medium text-xl">A look back at all our beautiful moments.</p>
+              </div>
 
-        @keyframes bounce-in {
-          0% { transform: scale(0.8); opacity: 0; }
-          60% { transform: scale(1.05); opacity: 1; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-bounce-in { animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        
-        .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
-        @keyframes fade-in {
-          0% { opacity: 0; }
-          100% { opacity: 1; }
-        }
-        
-        /* Journal Lines for Card Back */
-        .journal-lines {
-          background-image: repeating-linear-gradient(transparent, transparent 27px, #f43f5e20 28px, #f43f5e20 29px);
-          background-attachment: local;
-        }
-        
-        /* Custom Scrollbar for Card Text */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #fda4af; border-radius: 10px; }
+              {/* Absolute "Click Me!!!" Cloud Pointing Directly at the Button */}
+              <div id="memory-btn-container" className="relative flex justify-center mt-6 mb-16">
+                {!hasOpenedMemoryLane && (
+                  <div className="absolute bottom-[110%] right-0 md:-right-12 transform translate-y-2 pointer-events-none z-20 flex flex-col items-center animate-[bounce-slight_3s_ease-in-out_infinite]">
+                    <svg width="40" height="55" viewBox="0 0 60 100" fill="none" className="stroke-stone-700 ml-10" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M 30 0 C 50 20, -10 30, 10 50 C 30 70, 50 30, 20 70 C 5 90, 5 90, 5 90" />
+                      <path d="M -5 75 L 5 90 L 20 85" />
+                    </svg>
+                  </div>
+                )}
 
-        /* New Mood Animations */
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.8; transform: scale(0.95); }
-        }
-        .animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
+                <button 
+                  onClick={() => {
+                    setShowSlideshow(true);
+                    setHasOpenedMemoryLane(true);
+                }}
+                  className="bg-rose-500 text-white px-12 py-6 rounded-full font-bold text-xl md:text-3xl hover:bg-rose-600 transition-all shadow-[0_0_40px_rgba(225,29,72,0.3)] hover:shadow-[0_0_50px_rgba(225,29,72,0.5)] flex items-center gap-5 transform hover:scale-105 active:scale-95 relative z-10"
+                >
+                  <Play className="w-10 h-10 fill-current" />
+                  Open The Memory Lane
+                </button>
+              </div>
+            </main>
 
-        @keyframes bounce-slight {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(10px); }
-        }
-        .animate-bounce-slight { animation: bounce-slight 3s ease-in-out infinite; }
+            <MoodSection />
 
-        @keyframes spin-slow {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        .animate-spin-slow { animation: spin-slow 12s linear infinite; }
+            {/* --- NIGHT SKY WRAPPER --- */}
+            <div className="relative w-full overflow-hidden flex flex-col">
+              <StarryBackground />
+              
+              {/* Smooth Fade-in for the stars from the white background */}
+              <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-stone-50 to-transparent pointer-events-none z-0" />
 
-        .animate-float-up {
-          animation: float-up-fade 3s ease-in forwards infinite;
-        }
-        @keyframes float-up-fade {
-          0% { transform: translateY(0) scale(0.5); opacity: 0; }
-          20% { opacity: 1; }
-          80% { opacity: 1; }
-          100% { transform: translateY(-60px) scale(1.2); opacity: 0; }
-        }
+              {/* Smooth Cinematic Bridge to Darkness */}
+              <div className="w-full pt-48 pb-12 relative z-10 flex items-center justify-center text-center px-4">
+                <p className="text-4xl md:text-6xl text-stone-300 font-medium drop-shadow-xl leading-snug" style={{ fontFamily: "'Caveat', cursive" }}>
+                  But through the highs and the lows... <br/>
+                  <span className="text-indigo-300 mt-6 inline-block drop-shadow-[0_0_15px_rgba(165,180,252,0.5)] font-bold">every single moment led up to this night.</span>
+                </p>
+              </div>
 
-        /* Movie Section Styles */
-        @keyframes slide-up-phone {
-          0% { transform: translateY(150px) rotate(5deg); opacity: 0; }
-          100% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        }
-        .animate-slide-up-phone { animation: slide-up-phone 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        
-        .text-shadow-glow { text-shadow: 0 0 20px rgba(255,255,255,0.4); }
+              {/* Movie Section */}
+              <div className="w-full relative z-10 pt-10 pb-20 flex flex-col items-center">
+                <MovieProposalSection />
+              </div>
 
-        @keyframes progress {
-          0% { width: 0%; }
-          100% { width: 100%; }
-        }
+              {/* MASSIVE Dedicated Game Section */}
+              <div className="w-full relative z-10 pt-24 pb-40 flex flex-col items-center bg-gradient-to-b from-transparent via-[#130f1c] to-transparent">
+                <div className="text-center max-w-4xl px-4 mb-16">
+                  <div className="inline-block p-6 bg-rose-500/10 rounded-full mb-8 backdrop-blur-md border border-rose-500/20 shadow-[0_0_30px_rgba(225,29,72,0.1)]">
+                     <ShieldAlert className="w-16 h-16 text-rose-400 animate-pulse" />
+                  </div>
+                  <h2 className="text-6xl md:text-8xl text-rose-200 mb-8 drop-shadow-lg font-bold" style={{ fontFamily: "'Caveat', cursive" }}>The Long Drive Scare</h2>
+                  <p className="text-indigo-200/90 text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mx-auto">
+                    Remember when we were outside of VET Ground? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
+                  </p>
+                </div>
+                
+                <button 
+                  onClick={() => setShowGame(true)}
+                  className="bg-rose-600 text-white px-16 py-8 rounded-full font-black text-2xl md:text-4xl hover:bg-rose-500 transition-all shadow-[0_0_60px_rgba(225,29,72,0.6)] hover:shadow-[0_0_80px_rgba(225,29,72,0.8)] flex items-center gap-6 transform hover:scale-105 active:scale-95 border-4 md:border-[6px] border-rose-400/30 group"
+                >
+                  <Car className="w-12 h-12 md:w-14 md:h-14 fill-current group-hover:animate-bounce-slight" />
+                  PLAY MINI-GAME
+                </button>
+              </div>
+            </div>
+          </div>
 
-        /* Twinkling Stars Animation */
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.2; transform: scale(0.8); }
-          50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 8px rgba(255,255,255,0.8); }
-        }
-        .animate-twinkle { animation: twinkle infinite ease-in-out; }
+          {/* Gift Section (Fades from deep theater stone into rich red Zomato theme) */}
+          <section className="py-40 bg-gradient-to-b from-[#0B0B1A] to-rose-950 text-white text-center px-4 relative overflow-hidden z-10">
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none mix-blend-overlay">
+              <div className="absolute -top-1/4 -right-1/4 w-[600px] h-[600px] bg-red-800 rounded-full blur-[120px] opacity-40" />
+              <div className="absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] bg-red-800 rounded-full blur-[120px] opacity-40" />
+            </div>
 
-        /* Police Siren Flash Animation */
-        @keyframes siren {
-          0%, 100% { background-color: rgba(220, 38, 38, 0.15); box-shadow: inset 0 0 100px rgba(220, 38, 38, 0.4); border-color: #dc2626; }
-          50% { background-color: rgba(37, 99, 235, 0.15); box-shadow: inset 0 0 100px rgba(37, 99, 235, 0.4); border-color: #2563eb; }
-        }
-        .animate-siren { animation: siren 0.4s infinite; }
-      `}} />
+            <div className="max-w-4xl mx-auto relative z-10">
+              <div className="inline-block p-6 bg-white/10 rounded-full mb-10 backdrop-blur-md border border-white/20 shadow-xl">
+                <Gift className="w-14 h-14 text-rose-300 animate-bounce" />
+              </div>
+              <h2 className="text-6xl md:text-8xl font-bold mb-8 text-white drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>
+                A Little Birthday Treat!
+              </h2>
+              <p className="text-2xl text-rose-200/90 mb-20 leading-relaxed font-medium max-w-2xl mx-auto">
+                I wish I could be there to celebrate with you! But since I can't, here is something to make your day special.
+              </p>
+
+              {!giftRevealed ? (
+                <button 
+                  onClick={revealGift}
+                  className="bg-white text-rose-950 px-12 py-6 rounded-full font-black text-2xl hover:bg-rose-50 transition-all shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:shadow-[0_0_70px_rgba(255,255,255,0.5)] flex items-center justify-center gap-4 mx-auto transform hover:scale-110 active:scale-95"
+                >
+                  <Sparkles className="w-8 h-8 text-yellow-500" />
+                  Reveal Your Gift!
+                </button>
+              ) : (
+                <div className="animate-[scale-in_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
+                  <div className="bg-gradient-to-br from-red-600 to-red-800 p-2 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.5)] max-w-lg mx-auto transform rotate-2 hover:rotate-0 transition-transform duration-500 cursor-pointer">
+                    <div className="bg-white text-stone-800 p-12 rounded-[2rem] border-4 border-dashed border-red-200/50 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 bg-red-600 text-white px-8 py-2 rounded-bl-3xl rounded-tr-[1.5rem] font-black text-sm tracking-[0.2em] shadow-md">
+                        ZOMATO
+                      </div>
+                      <img 
+                        src="/images/zomato.png" 
+                        alt="Zomato" 
+                        className="h-10 mx-auto mb-10 object-contain drop-shadow-sm"
+                      />
+                      <h3 className="text-6xl font-black text-stone-900 mb-3 tracking-tighter">₹2,000</h3>
+                      <p className="text-stone-500 font-bold text-lg mb-10 uppercase tracking-widest">Voucher to treat your cravings!</p>
+                      
+                      <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-inner flex flex-col gap-5">
+                        <div>
+                          <p className="text-xs text-stone-400 uppercase tracking-[0.2em] mb-2 font-bold">16-Digit Gift Code</p>
+                          <div className="bg-white py-3 rounded-xl border border-stone-200 shadow-sm">
+                            <p className="text-xl md:text-2xl font-mono font-black text-stone-800 tracking-[0.15em]">6004860020238313</p>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <p className="text-xs text-stone-400 uppercase tracking-[0.2em] mb-2 font-bold">Gift PIN</p>
+                          <div className="bg-white py-2 px-8 rounded-xl border border-stone-200 shadow-sm inline-block">
+                            <p className="text-2xl font-mono font-black text-red-600 tracking-[0.25em]">110676</p>
+                          </div>
+                        </div>
+                        
+                        <p className="text-xs md:text-sm text-stone-500 mt-2 font-bold">Apply this Code and PIN in your Zomato App</p>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="mt-20 text-5xl text-rose-300 font-bold drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>
+                    I love you so much. Happy Birthday. ❤️
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* Slideshow Overlay Modal */}
+          {showSlideshow && (
+            <JourneySlideshowOverlay 
+              events={timelineEvents} 
+              onClose={() => setShowSlideshow(false)} 
+            />
+          )}
+
+          {/* Mini Game Overlay Modal */}
+          {showGame && (
+            <PoliceEscapeGame onClose={() => setShowGame(false)} />
+          )}
+
+          {/* Global utility animations */}
+          <style dangerouslySetInnerHTML={{__html: `
+            @keyframes fade-in-up {
+              0% { opacity: 0; transform: translateY(30px); }
+              100% { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes scale-in {
+              0% { opacity: 0; transform: scale(0.5); }
+              100% { opacity: 1; transform: scale(1); }
+            }
+            @keyframes blink {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0; }
+            }
+            .animate-blink { animation: blink 1s step-end infinite; }
+            
+            @keyframes float {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-20px); }
+            }
+            .animate-float { animation: float 4s ease-in-out infinite; }
+
+            @keyframes confetti-fall {
+              0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+              100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            }
+            .animate-confetti-fall { animation: confetti-fall linear forwards; }
+
+            @keyframes bounce-in {
+              0% { transform: scale(0.8); opacity: 0; }
+              60% { transform: scale(1.05); opacity: 1; }
+              100% { transform: scale(1); opacity: 1; }
+            }
+            .animate-bounce-in { animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+            
+            .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
+            @keyframes fade-in {
+              0% { opacity: 0; }
+              100% { opacity: 1; }
+            }
+            
+            /* Journal Lines for Card Back */
+            .journal-lines {
+              background-image: repeating-linear-gradient(transparent, transparent 27px, #f43f5e20 28px, #f43f5e20 29px);
+              background-attachment: local;
+            }
+            
+            /* Custom Scrollbar for Card Text */
+            .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #fda4af; border-radius: 10px; }
+
+            /* New Mood Animations */
+            @keyframes pulse-slow {
+              0%, 100% { opacity: 1; transform: scale(1); }
+              50% { opacity: 0.8; transform: scale(0.95); }
+            }
+            .animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
+
+            @keyframes bounce-slight {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(10px); }
+            }
+            .animate-bounce-slight { animation: bounce-slight 3s ease-in-out infinite; }
+
+            @keyframes spin-slow {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+            .animate-spin-slow { animation: spin-slow 12s linear infinite; }
+
+            .animate-float-up {
+              animation: float-up-fade 3s ease-in forwards infinite;
+            }
+            @keyframes float-up-fade {
+              0% { transform: translateY(0) scale(0.5); opacity: 0; }
+              20% { opacity: 1; }
+              80% { opacity: 1; }
+              100% { transform: translateY(-60px) scale(1.2); opacity: 0; }
+            }
+
+            /* Movie Section Styles */
+            @keyframes slide-up-phone {
+              0% { transform: translateY(150px) rotate(5deg); opacity: 0; }
+              100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            }
+            .animate-slide-up-phone { animation: slide-up-phone 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+            
+            .text-shadow-glow { text-shadow: 0 0 20px rgba(255,255,255,0.4); }
+
+            @keyframes progress {
+              0% { width: 0%; }
+              100% { width: 100%; }
+            }
+
+            /* Twinkling Stars Animation */
+            @keyframes twinkle {
+              0%, 100% { opacity: 0.2; transform: scale(0.8); }
+              50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 8px rgba(255,255,255,0.8); }
+            }
+            .animate-twinkle { animation: twinkle infinite ease-in-out; }
+
+            /* Police Siren Flash Animation */
+            @keyframes siren {
+              0%, 100% { background-color: rgba(220, 38, 38, 0.15); box-shadow: inset 0 0 100px rgba(220, 38, 38, 0.4); border-color: #dc2626; }
+              50% { background-color: rgba(37, 99, 235, 0.15); box-shadow: inset 0 0 100px rgba(37, 99, 235, 0.4); border-color: #2563eb; }
+            }
+            .animate-siren { animation: siren 0.4s infinite; }
+          `}} />
         </div>
       )}
     </>
