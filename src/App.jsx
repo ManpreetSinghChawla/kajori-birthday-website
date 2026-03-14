@@ -666,11 +666,11 @@ const PoliceEscapeGame = ({ onClose }) => {
             ) : (
               <div className="w-full flex flex-col items-center gap-2 md:gap-4 shrink-0">
                 <div
-                  className={`w-full py-3 md:py-6 rounded-xl md:rounded-2xl font-black text-base md:text-2xl tracking-widest uppercase transition-all select-none shadow-2xl border-b-4 md:border-b-8 ${copWarning ? 'bg-red-600 text-white border-red-800 scale-[0.98]' : isPressing ? 'bg-rose-400 text-white border-rose-600 scale-[0.98]' : 'bg-rose-500 text-white border-rose-700'}`}
+                  className={`w-full py-3 md:py-6 rounded-xl md:rounded-2xl font-black text-center text-base md:text-2xl tracking-widest uppercase transition-all select-none shadow-2xl border-b-4 md:border-b-8 ${copWarning ? 'bg-red-600 text-white border-red-800 scale-[0.98]' : isPressing ? 'bg-rose-400 text-white border-rose-600 scale-[0.98]' : 'bg-rose-500 text-white border-rose-700'}`}
                 >
                   {copWarning ? "LET GO NOW!!!" : "[ HOLD SPACEBAR ]"}
                 </div>
-                <p className={`text-xs md:text-lg font-bold mt-1 md:mt-2 ${copWarning ? 'text-red-400 animate-pulse' : 'text-indigo-300'}`}>
+                <p className={`text-xs md:text-lg text-center font-bold mt-1 md:mt-2 ${copWarning ? 'text-red-400 animate-pulse' : 'text-indigo-300'}`}>
                   Let go <span className={`${copWarning ? 'text-white bg-red-600' : 'text-red-400 bg-red-400/10'} px-2 py-0.5 rounded`}>IMMEDIATELY</span> if you see police!
                 </p>
               </div>
@@ -797,11 +797,11 @@ export default function App() {
   // Teasing logic timer
   useEffect(() => {
     if (appStep === 1) {
-      // She has to chase it for 10 seconds!
+      // She has to chase it for 15 seconds!
       const timer = setTimeout(() => {
         setIsTeasing(false);
         setTeaseOffset({ x: 0, y: 0 }); // Reset to center
-      }, 10000);
+      }, 15000);
       return () => clearTimeout(timer);
     }
   }, [appStep]);
