@@ -141,7 +141,7 @@ const Typewriter = ({ words }) => {
   }, [text, isDeleting, loopNum, typingSpeed, words]);
 
   return (
-    <span className="text-7xl md:text-9xl font-black text-rose-950 mb-6 drop-shadow-sm tracking-tighter block">
+    <span className="text-5xl sm:text-6xl md:text-8xl font-black text-rose-950 mb-6 drop-shadow-md tracking-tighter block leading-tight text-center break-words w-full px-2">
       To {text}<span className="animate-blink font-light text-rose-400">|</span>
     </span>
   );
@@ -149,7 +149,7 @@ const Typewriter = ({ words }) => {
 
 const FloatingParticle = ({ delay, left, size, duration }) => (
   <div 
-    className="absolute text-rose-300 opacity-20 animate-float-up pointer-events-none z-0"
+    className="absolute text-rose-400 opacity-20 animate-float-up pointer-events-none z-0"
     style={{ left: `${left}%`, animationDelay: `${delay}s`, fontSize: `${size}px`, animationDuration: `${duration}s`, bottom: '-50px' }}
   >
     <Heart fill="currentColor" />
@@ -173,8 +173,8 @@ const TimeCounter = () => {
   }, []);
 
   return (
-    <div className="bg-white/90 backdrop-blur-md px-6 py-5 rounded-3xl shadow-lg border border-rose-100 flex flex-wrap justify-center gap-4 sm:gap-8 text-rose-900 mt-10 transform transition hover:scale-105 z-10 relative">
-      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-rose-500 text-white text-xs px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold shadow-md tracking-wider">
+    <div className="bg-white/90 backdrop-blur-md px-6 py-5 rounded-3xl shadow-[0_10px_30px_rgba(251,113,133,0.15)] border border-rose-100/60 flex flex-wrap justify-center gap-4 sm:gap-8 text-rose-900 mt-10 transform transition hover:scale-105 z-10 relative">
+      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-rose-500 to-rose-600 text-white text-xs px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold shadow-md tracking-wider">
         <Clock className="w-3.5 h-3.5" /> SINCE JUNE 17, 2023
       </div>
       {[
@@ -245,7 +245,7 @@ const JourneySlideshowOverlay = ({ events, onClose }) => {
       </button>
 
       <div key={currentIndex} className="relative w-full max-w-5xl flex flex-col md:flex-row bg-white rounded-2xl md:rounded-[2.5rem] overflow-hidden shadow-[0_0_60px_rgba(225,29,72,0.15)] animate-[scale-in_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
-        <div className="absolute top-0 left-0 h-1.5 bg-rose-500 z-50 animate-[progress_15s_linear_forwards]" />
+        <div className="absolute top-0 left-0 h-1.5 bg-gradient-to-r from-rose-400 to-rose-600 z-50 animate-[progress_15s_linear_forwards]" />
 
         {/* IMAGE CONTAINER FIX: Using relative flex container + absolute image to prevent ANY empty space */}
         <div className="w-full md:w-1/2 relative min-h-[300px] md:min-h-[600px] shrink-0 bg-stone-100 flex">
@@ -253,10 +253,10 @@ const JourneySlideshowOverlay = ({ events, onClose }) => {
            <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent md:hidden" />
         </div>
 
-        <div className="w-full md:w-1/2 p-8 md:p-14 flex flex-col bg-stone-50 relative">
+        <div className="w-full md:w-1/2 p-8 md:p-14 flex flex-col bg-[#FCFAFA] relative">
            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-20 h-6 bg-rose-200/90 rotate-[-2deg] shadow-sm z-30 opacity-80 backdrop-blur-sm" style={{ clipPath: 'polygon(0 0%, 100% 5%, 95% 100%, 5% 95%)'}} />
 
-           <div className="flex justify-between items-center mb-8 border-b border-rose-200 pb-6 shrink-0">
+           <div className="flex justify-between items-center mb-8 border-b border-rose-200/60 pb-6 shrink-0">
              <h3 className="text-3xl md:text-5xl text-rose-900 pr-4 font-bold drop-shadow-sm" style={{ fontFamily: "'Caveat', cursive", lineHeight: '1.1' }}>{slide.title}</h3>
              <div className="text-rose-500 bg-rose-100 p-4 rounded-full shadow-inner shrink-0">
                {slide.icon}
@@ -269,7 +269,7 @@ const JourneySlideshowOverlay = ({ events, onClose }) => {
              </p>
            </div>
 
-           <div className="mt-8 flex items-center justify-between pt-6 border-t border-rose-100 shrink-0">
+           <div className="mt-8 flex items-center justify-between pt-6 border-t border-rose-100/60 shrink-0">
              <button onClick={prevSlide} disabled={currentIndex === 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold transition-all ${currentIndex === 0 ? 'text-stone-300 cursor-not-allowed' : 'text-rose-500 hover:bg-rose-100 active:scale-95'}`}>
                <ChevronLeft className="w-5 h-5" /> Prev
              </button>
@@ -294,9 +294,9 @@ const MoodSection = () => {
   const [isAround, setIsAround] = useState(false);
 
   return (
-    <section className="py-20 md:py-32 relative z-10 w-full bg-stone-50">
-      <div className={`max-w-4xl mx-auto px-6 md:px-12 py-16 rounded-[3rem] transition-all duration-1000 border backdrop-blur-xl shadow-2xl text-center relative overflow-hidden ${isAround ? 'bg-white/90 border-rose-200 shadow-[0_20px_50px_rgba(251,113,133,0.15)]' : 'bg-stone-900/95 border-stone-700 shadow-[0_20px_50px_rgba(0,0,0,0.4)]'}`}>
-        <h2 className={`text-5xl md:text-7xl mb-12 font-bold transition-colors duration-1000 relative z-10 ${isAround ? 'text-rose-950' : 'text-stone-100'}`} style={{ fontFamily: "'Caveat', cursive" }}>
+    <section className="py-20 md:py-32 relative z-10 w-full">
+      <div className={`max-w-4xl mx-auto px-6 md:px-12 py-16 rounded-[3rem] transition-all duration-1000 border backdrop-blur-xl shadow-2xl text-center relative overflow-hidden ${isAround ? 'bg-white/95 border-rose-200 shadow-[0_20px_60px_rgba(251,113,133,0.15)]' : 'bg-stone-900/95 border-stone-700 shadow-[0_20px_50px_rgba(0,0,0,0.3)]'}`}>
+        <h2 className={`text-5xl md:text-7xl mb-12 font-bold transition-colors duration-1000 relative z-10 drop-shadow-sm ${isAround ? 'text-rose-950' : 'text-stone-100'}`} style={{ fontFamily: "'Caveat', cursive" }}>
           The Kajori Effect
         </h2>
 
@@ -304,16 +304,16 @@ const MoodSection = () => {
           <span className={`font-medium text-lg md:text-xl transition-colors ${!isAround ? 'text-stone-300' : 'text-stone-400'}`}>When you're not around</span>
           <button
             onClick={() => setIsAround(!isAround)}
-            className={`w-28 h-14 rounded-full p-1.5 transition-colors duration-500 flex items-center shadow-inner relative ${isAround ? 'bg-rose-100' : 'bg-black/60'} cursor-pointer hover:scale-105 active:scale-95`}
+            className={`w-28 h-14 rounded-full p-1.5 transition-colors duration-500 flex items-center shadow-inner relative ${isAround ? 'bg-rose-100' : 'bg-black/60'} cursor-pointer hover:scale-105 active:scale-95 border ${isAround ? 'border-rose-200' : 'border-stone-700'}`}
           >
-            <div className={`w-11 h-11 rounded-full shadow-lg transform transition-transform duration-500 flex items-center justify-center ${isAround ? 'translate-x-14 bg-rose-500' : 'translate-x-0 bg-stone-600'}`}>
+            <div className={`w-11 h-11 rounded-full shadow-lg transform transition-transform duration-500 flex items-center justify-center ${isAround ? 'translate-x-14 bg-gradient-to-br from-rose-400 to-rose-600' : 'translate-x-0 bg-stone-600'}`}>
               {isAround ? <Heart className="w-5 h-5 text-white animate-pulse" fill="currentColor"/> : <CloudRain className="w-5 h-5 text-white"/>}
             </div>
           </button>
           <span className={`font-medium text-lg md:text-xl transition-colors ${isAround ? 'text-rose-900' : 'text-stone-500'}`}>When you're with me!</span>
         </div>
 
-        <div className={`h-[280px] md:h-[300px] w-full max-w-md mx-auto rounded-3xl p-8 relative transition-all duration-700 overflow-hidden ${isAround ? 'bg-rose-50 border border-rose-100' : 'bg-white/5 border border-white/10'}`}>
+        <div className={`h-[280px] md:h-[300px] w-full max-w-md mx-auto rounded-3xl p-8 relative transition-all duration-700 overflow-hidden ${isAround ? 'bg-[#FFF5F6] border border-rose-100 shadow-inner' : 'bg-white/5 border border-white/10 shadow-inner'}`}>
           <div className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-500 ${!isAround ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
             <div className="relative mb-6">
               <CloudRain className="w-24 h-24 text-stone-500 absolute -top-4 -left-4 -z-10 animate-bounce-slight opacity-50 pointer-events-none" />
@@ -326,10 +326,10 @@ const MoodSection = () => {
 
           <div className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-500 ${isAround ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
             <div className="relative mb-6">
-               <Sun className="w-28 h-28 text-yellow-400 absolute -top-6 -left-4 -z-10 animate-spin-slow opacity-90 pointer-events-none" />
-               <Smile className="w-20 h-20 text-rose-500 animate-bounce pointer-events-none" />
+               <Sun className="w-28 h-28 text-yellow-400 absolute -top-6 -left-4 -z-10 animate-spin-slow opacity-90 pointer-events-none drop-shadow-lg" />
+               <Smile className="w-20 h-20 text-rose-500 animate-bounce pointer-events-none drop-shadow-md" />
             </div>
-            <p className="text-rose-950 text-3xl font-bold leading-relaxed select-none" style={{ fontFamily: "'Caveat', cursive" }}>
+            <p className="text-rose-950 text-3xl font-bold leading-relaxed select-none drop-shadow-sm" style={{ fontFamily: "'Caveat', cursive" }}>
               Everything is magical! <br/> I'm the happiest guy ever! 🥰
             </p>
             
@@ -373,31 +373,31 @@ const MovieProposalSection = () => {
   return (
     <section className="pb-24 pt-10 relative z-10 text-center">
       <div className="max-w-4xl mx-auto px-4 relative z-10">
-        <h2 className="text-5xl md:text-7xl text-rose-200 mb-6 drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>The Night It Became Official</h2>
+        <h2 className="text-5xl md:text-7xl text-rose-200 mb-6 drop-shadow-[0_0_15px_rgba(225,29,72,0.3)] font-bold" style={{ fontFamily: "'Caveat', cursive" }}>The Night It Became Official</h2>
         <p className="text-indigo-200 mb-14 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
           My parents were out. You came over. We were supposed to watch a movie...
         </p>
 
-        <div className={`relative mx-auto w-full max-w-3xl bg-black rounded-xl md:rounded-3xl border-[8px] md:border-[12px] border-stone-800 shadow-[0_0_60px_rgba(0,0,0,0.6)] transition-all duration-1000 overflow-hidden ${movieState === 'distracted' || movieState === 'phone' ? 'h-24 md:h-32 opacity-60' : 'aspect-video'}`}>
+        <div className={`relative mx-auto w-full max-w-3xl bg-black rounded-xl md:rounded-3xl border-[8px] md:border-[12px] border-stone-800 shadow-[0_0_60px_rgba(0,0,0,0.8)] transition-all duration-1000 overflow-hidden ${movieState === 'distracted' || movieState === 'phone' ? 'h-24 md:h-32 opacity-60' : 'aspect-video'}`}>
           <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-4 bg-stone-800 rounded-b-lg" />
 
           {movieState === 'idle' && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-stone-900 group">
-              <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] group">
+              <div className="absolute inset-0 bg-indigo-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               <Tv className="w-12 h-12 md:w-16 md:h-16 text-stone-600 mb-4 transition-transform group-hover:scale-110 duration-500" />
-              <h3 className="text-2xl md:text-4xl font-black text-white tracking-[0.3em] mb-8 text-shadow-glow">JUJUTSU KAISEN 0</h3>
-              <button onClick={handlePlay} className="bg-rose-600 text-white px-8 py-3 rounded-full flex items-center gap-3 hover:bg-rose-500 transition-all hover:scale-105 shadow-[0_0_20px_rgba(225,29,72,0.4)] z-10 font-bold uppercase tracking-wider text-sm md:text-base">
+              <h3 className="text-2xl md:text-4xl font-black text-stone-100 tracking-[0.3em] mb-8 text-shadow-glow">JUJUTSU KAISEN 0</h3>
+              <button onClick={handlePlay} className="bg-gradient-to-r from-rose-500 to-rose-600 text-white px-8 py-3 rounded-full flex items-center gap-3 hover:from-rose-400 hover:to-rose-500 transition-all hover:scale-105 shadow-[0_0_30px_rgba(225,29,72,0.5)] z-10 font-bold uppercase tracking-wider text-sm md:text-base border border-rose-400/50">
                 <Play className="w-5 h-5 fill-current" /> Play Movie
               </button>
             </div>
           )}
 
           {movieState === 'playing' && (
-            <div className="absolute inset-0 bg-indigo-950 flex flex-col items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
+            <div className="absolute inset-0 bg-[#0a0f1c] flex flex-col items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
               <h3 className="text-3xl md:text-5xl font-black text-white tracking-[0.3em] mb-10 animate-pulse drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">JUJUTSU KAISEN 0</h3>
-              <div className="w-4/5 max-w-md bg-stone-800 rounded-full h-2 md:h-3 overflow-hidden relative shadow-inner">
-                <div className="bg-rose-500 h-full transition-all duration-200 ease-linear" style={{ width: `${(progress / 10) * 100}%` }} />
+              <div className="w-4/5 max-w-md bg-stone-800/80 rounded-full h-2 md:h-3 overflow-hidden relative shadow-inner border border-white/5">
+                <div className="bg-rose-500 h-full transition-all duration-200 ease-linear shadow-[0_0_10px_rgba(225,29,72,0.8)]" style={{ width: `${(progress / 10) * 100}%` }} />
               </div>
               <div className="flex justify-between w-4/5 max-w-md mt-3 text-stone-400 font-mono text-xs md:text-sm">
                 <span>00:{progress < 10 ? `0${progress}` : progress}:00</span>
@@ -408,15 +408,15 @@ const MovieProposalSection = () => {
 
           {(movieState === 'distracted' || movieState === 'phone') && (
             <div className="absolute inset-0 flex items-center justify-center bg-black">
-              <p className="text-rose-500 font-bold tracking-[0.2em] md:tracking-[0.4em] text-lg md:text-xl animate-pulse">... 10 MINUTES LATER ...</p>
+              <p className="text-rose-500 font-bold tracking-[0.2em] md:tracking-[0.4em] text-lg md:text-xl animate-pulse drop-shadow-[0_0_10px_rgba(225,29,72,0.5)]">... 10 MINUTES LATER ...</p>
             </div>
           )}
         </div>
 
         {movieState === 'distracted' && (
           <div className="mt-16 animate-fade-in-up">
-            <HeartPulse className="w-20 h-20 text-rose-500 mx-auto animate-bounce shadow-rose-500/50 drop-shadow-2xl" />
-            <p className="text-white mt-6 text-2xl md:text-4xl font-medium" style={{ fontFamily: "'Caveat', cursive" }}>
+            <HeartPulse className="w-20 h-20 text-rose-500 mx-auto animate-bounce shadow-rose-500/50 drop-shadow-[0_0_30px_rgba(225,29,72,0.6)]" />
+            <p className="text-stone-100 mt-6 text-2xl md:text-4xl font-medium drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>
               Yeah... we couldn't keep our hands off each other. 🙈
             </p>
           </div>
@@ -424,21 +424,21 @@ const MovieProposalSection = () => {
 
         {movieState === 'phone' && (
           <div className="mt-16 flex flex-col items-center animate-slide-up-phone relative z-20">
-            <p className="text-rose-200 mb-10 text-2xl md:text-4xl drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>
+            <p className="text-rose-200 mb-10 text-2xl md:text-4xl drop-shadow-md font-bold" style={{ fontFamily: "'Caveat', cursive" }}>
               Then I nervously whipped out my phone...
             </p>
-            <div className="w-[300px] md:w-[380px] h-[580px] md:h-[700px] bg-white rounded-[3rem] border-[14px] border-stone-800 shadow-[0_30px_60px_rgba(0,0,0,0.6)] relative overflow-hidden flex flex-col transform transition-transform hover:scale-[1.02] duration-500">
-              <div className="absolute top-0 inset-x-0 h-7 bg-stone-800 rounded-b-3xl w-36 mx-auto z-20" />
-              <div className="bg-white h-8 w-full shrink-0 flex items-end justify-between px-6 pb-1 text-[10px] font-bold text-stone-800">
+            <div className="w-[300px] md:w-[380px] h-[580px] md:h-[700px] bg-[#fdfbf7] rounded-[3rem] border-[14px] border-[#1c1917] shadow-[0_30px_60px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col transform transition-transform hover:scale-[1.02] duration-500">
+              <div className="absolute top-0 inset-x-0 h-7 bg-[#1c1917] rounded-b-3xl w-36 mx-auto z-20" />
+              <div className="bg-[#fdfbf7] h-8 w-full shrink-0 flex items-end justify-between px-6 pb-1 text-[10px] font-bold text-stone-800">
                 <span>11:45</span>
                 <div className="flex items-center gap-1"><div className="w-3 h-3 bg-stone-800 rounded-sm" /></div>
               </div>
-              <div className="bg-yellow-50/80 pt-2 pb-3 px-4 flex items-center justify-between border-b border-yellow-200 shrink-0">
+              <div className="bg-yellow-50/90 pt-2 pb-3 px-4 flex items-center justify-between border-b border-yellow-200 shrink-0">
                 <span className="text-yellow-600 font-medium text-sm md:text-base flex items-center gap-1"><ChevronLeft className="w-5 h-5" /> Folders</span>
                 <Edit3 className="w-5 h-5 text-yellow-600" />
               </div>
-              <div className="flex-1 bg-yellow-50/40 p-6 pt-4 text-left overflow-y-auto relative custom-scrollbar">
-                <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, #eab308 28px, #eab308 29px)', backgroundAttachment: 'local' }} />
+              <div className="flex-1 bg-yellow-50/50 p-6 pt-4 text-left overflow-y-auto relative custom-scrollbar">
+                <div className="absolute inset-0 opacity-[0.15] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, #eab308 28px, #eab308 29px)', backgroundAttachment: 'local' }} />
                 <div className="relative z-10 text-stone-800">
                   <h4 className="font-bold text-base mb-4 text-stone-900 font-sans tracking-wide">17 June 2023</h4>
                   <p className="leading-relaxed whitespace-pre-line text-stone-900 font-medium" style={{ fontFamily: "'Caveat', cursive", fontSize: '1.45rem' }}>
@@ -568,116 +568,114 @@ const PoliceEscapeGame = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[160] bg-stone-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-2 md:p-4 animate-fade-in overflow-hidden">
+    <div className="fixed inset-0 z-[160] bg-stone-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 animate-fade-in overflow-hidden">
       
       <button 
         onClick={onClose}
-        className="absolute top-4 right-4 text-stone-400 hover:text-white transition-colors p-3 bg-white/10 rounded-full hover:bg-rose-500 z-[170] shadow-lg"
+        className="absolute top-4 right-4 md:top-8 md:right-8 text-stone-400 hover:text-white transition-colors p-3 bg-white/10 rounded-full hover:bg-rose-500 z-[170] shadow-lg"
       >
         <X className="w-8 h-8" />
       </button>
 
-      <div className="max-w-5xl mx-auto px-2 md:px-4 relative z-10 text-center w-full h-full max-h-[100vh] flex flex-col justify-center animate-[scale-in_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
-        <div className="overflow-y-auto custom-scrollbar flex flex-col items-center w-full py-4">
-          <h2 className="text-4xl md:text-6xl text-rose-300 mb-2 md:mb-4 drop-shadow-md shrink-0 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>The Long Drive Scare</h2>
-          <p className="text-indigo-200 mb-4 md:mb-6 text-sm md:text-lg font-medium max-w-3xl mx-auto leading-relaxed drop-shadow-sm shrink-0">
-            Remember when we were parked in front of VET Ground? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
-          </p>
+      <div className="max-w-4xl mx-auto w-full flex flex-col items-center justify-center animate-[scale-in_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
+        <h2 className="text-4xl md:text-6xl lg:text-7xl text-rose-300 mb-2 drop-shadow-md font-bold text-center w-full" style={{ fontFamily: "'Caveat', cursive" }}>The Long Drive Scare</h2>
+        <p className="text-indigo-200 mb-6 md:mb-8 text-sm md:text-lg font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-sm px-2 text-center">
+          Remember when we were parked in front of VET Ground? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
+        </p>
 
-          {/* Game Container */}
-          <div className={`relative w-full max-w-4xl mx-auto rounded-[2rem] border-[6px] overflow-hidden shadow-2xl transition-colors duration-100 shrink min-h-[300px] ${copWarning ? 'animate-siren border-red-500 shadow-[0_0_100px_rgba(255,0,0,0.8)]' : 'bg-stone-900 border-stone-700 shadow-[0_0_50px_rgba(0,0,0,0.8)]'}`}>
+        {/* Arcade Game Container */}
+        <div className={`relative w-full rounded-[2rem] border-[4px] md:border-[6px] overflow-hidden shadow-2xl transition-colors duration-100 ${copWarning ? 'animate-siren border-red-500 shadow-[0_0_100px_rgba(255,0,0,0.8)]' : 'bg-[#161224] border-[#2D2442] shadow-[0_20px_60px_rgba(0,0,0,0.8)]'}`}>
+          
+          {/* Flashing Police Lights Effect */}
+          {copWarning && <div className="absolute inset-0 bg-red-600/20 animate-pulse pointer-events-none" />}
+
+          <div className="p-5 md:p-10 flex flex-col items-center relative z-10 w-full">
             
-            {/* Flashing Police Lights Effect */}
-            {copWarning && <div className="absolute inset-0 bg-red-600/20 animate-pulse pointer-events-none" />}
+            {/* Visual Screen */}
+            <div className="h-32 sm:h-48 md:h-64 flex items-center justify-center relative w-full mb-6 bg-[#0B0914] rounded-2xl md:rounded-3xl border-2 border-white/5 overflow-hidden shadow-inner">
+               
+               {/* Pre-Warning Text Overlay */}
+               {preWarning && (
+                 <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 flex items-center justify-center bg-orange-500/90 px-4 md:px-6 py-2 rounded-full border-2 md:border-4 border-orange-300 shadow-[0_0_30px_rgba(249,115,22,0.8)] animate-pulse">
+                    <span className="text-sm md:text-xl font-black text-white tracking-widest uppercase whitespace-nowrap drop-shadow-md">
+                       ⚠️ Police incoming...
+                    </span>
+                 </div>
+               )}
 
-            <div className="p-6 md:p-10 flex flex-col items-center relative z-10 h-full justify-center">
-              
-              {/* Visual Screen */}
-              <div className="h-32 md:h-56 flex items-center justify-center relative w-full mb-8 bg-black/70 rounded-3xl border-2 border-white/10 overflow-hidden shadow-inner">
-                 
-                 {/* Pre-Warning Text Overlay */}
-                 {preWarning && (
-                   <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 flex items-center justify-center bg-orange-500/90 px-6 py-2.5 rounded-full border-4 border-orange-300 shadow-[0_0_30px_rgba(249,115,22,0.8)] animate-pulse">
-                      <span className="text-xl md:text-2xl font-black text-white tracking-widest uppercase whitespace-nowrap drop-shadow-md">
-                         ⚠️ Police incoming...
-                      </span>
-                   </div>
-                 )}
+               {/* Massive Police Warning Overlay */}
+               {copWarning && (
+                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-red-600/40 backdrop-blur-[2px]">
+                    <span className="text-4xl sm:text-5xl md:text-7xl font-black text-white tracking-widest uppercase drop-shadow-[0_0_30px_rgba(255,0,0,1)] animate-[bounce-slight_0.3s_ease-in-out_infinite]">🚨 POLICE! 🚨</span>
+                 </div>
+               )}
 
-                 {/* Massive Police Warning Overlay */}
-                 {copWarning && (
-                   <div className="absolute inset-0 z-20 flex items-center justify-center bg-red-600/40 backdrop-blur-[2px]">
-                      <span className="text-5xl md:text-7xl font-black text-white tracking-widest uppercase drop-shadow-[0_0_30px_rgba(255,0,0,1)] animate-[bounce-slight_0.3s_ease-in-out_infinite]">🚨 POLICE! 🚨</span>
-                   </div>
-                 )}
+               {gameState === 'idle' && (
+                 <Car className="w-16 h-16 md:w-32 md:h-32 text-indigo-900 opacity-60" />
+               )}
+               
+               {gameState === 'playing' && (
+                 <div className="flex flex-col items-center relative z-10">
+                   {copWarning ? (
+                     <ShieldAlert className="w-16 h-16 md:w-32 md:h-32 text-transparent" /> /* Invisible placeholder */
+                   ) : (
+                     <div className={`text-6xl md:text-8xl transition-transform duration-100 ${isPressing ? 'scale-125 animate-[bounce-slight_0.5s_ease-in-out_infinite]' : 'scale-100'}`}>
+                       {isPressing ? '👩‍❤️‍💋‍👨' : '🚗'}
+                     </div>
+                   )}
+                   {isPressing && !copWarning && (
+                     <Heart className="absolute -top-4 -right-4 md:-top-8 md:-right-8 w-8 h-8 md:w-10 md:h-10 text-rose-500 animate-float-up fill-current drop-shadow-lg" />
+                   )}
+                 </div>
+               )}
 
-                 {gameState === 'idle' && (
-                   <Car className="w-20 h-20 md:w-32 md:h-32 text-stone-400 opacity-80" />
-                 )}
-                 
-                 {gameState === 'playing' && (
-                   <div className="flex flex-col items-center relative z-10">
-                     {copWarning ? (
-                       <ShieldAlert className="w-20 h-20 md:w-32 md:h-32 text-transparent" /> /* Invisible placeholder */
-                     ) : (
-                       <div className={`text-6xl md:text-8xl transition-transform duration-100 ${isPressing ? 'scale-125 animate-[bounce-slight_0.5s_ease-in-out_infinite]' : 'scale-100'}`}>
-                         {isPressing ? '👩‍❤️‍💋‍👨' : '🚗'}
-                       </div>
-                     )}
-                     {isPressing && !copWarning && (
-                       <Heart className="absolute -top-6 -right-6 md:-top-8 md:-right-8 w-10 h-10 text-rose-500 animate-float-up fill-current" />
-                     )}
-                   </div>
-                 )}
+               {gameState === 'caught' && (
+                 <div className="flex flex-col items-center z-10">
+                   <span className="text-6xl md:text-8xl mb-2 md:mb-4">👮‍♂️🚨</span>
+                   <p className="text-red-400 font-bold tracking-widest uppercase text-xs md:text-xl drop-shadow-md">"STEP OUTSIDE OF THE CAR!"</p>
+                 </div>
+               )}
 
-                 {gameState === 'caught' && (
-                   <div className="flex flex-col items-center z-10">
-                     <span className="text-6xl md:text-8xl mb-4">👮‍♂️🚨</span>
-                     <p className="text-red-400 font-bold tracking-widest uppercase text-sm md:text-xl drop-shadow-md">"STEP OUTSIDE OF THE CAR!"</p>
-                   </div>
-                 )}
-
-                 {gameState === 'won' && (
-                   <div className="flex flex-col items-center z-10">
-                     <span className="text-6xl md:text-8xl mb-4">🥰🎉</span>
-                     <p className="text-rose-400 font-bold tracking-widest uppercase text-sm md:text-xl drop-shadow-md">You safely survived the drive!</p>
-                   </div>
-                 )}
-              </div>
-
-              {/* Passion Progress Bar */}
-              <div className="w-full bg-stone-950 rounded-full h-8 mb-8 border-2 border-stone-700 relative overflow-hidden shadow-inner">
-                 <div 
-                   className={`h-full transition-all duration-75 ${score === 100 ? 'bg-green-500' : 'bg-gradient-to-r from-rose-600 to-pink-500'}`} 
-                   style={{ width: `${score}%` }} 
-                 />
-                 <span className="absolute inset-0 flex items-center justify-center text-xs md:text-sm font-black tracking-widest text-white/80 uppercase drop-shadow-md">
-                   Passion Meter
-                 </span>
-              </div>
-
-              {/* Controls */}
-              {gameState === 'idle' || gameState === 'caught' || gameState === 'won' ? (
-                <button 
-                  onClick={startGame}
-                  className="bg-rose-500 text-white px-8 py-4 md:px-12 md:py-5 rounded-full font-bold hover:bg-rose-600 transition-all active:scale-95 shadow-[0_0_30px_rgba(244,63,94,0.4)] w-full md:w-auto text-lg md:text-2xl tracking-wider"
-                >
-                  {gameState === 'idle' ? 'Start Game' : 'Try Again'}
-                </button>
-              ) : (
-                <div className="w-full flex flex-col items-center gap-2 md:gap-4 shrink-0">
-                  <div
-                    className={`w-full py-4 md:py-6 rounded-2xl font-black text-lg md:text-2xl tracking-widest uppercase transition-all select-none shadow-2xl border-b-8 ${copWarning ? 'bg-red-600 text-white border-red-800 scale-[0.98]' : isPressing ? 'bg-rose-400 text-white border-rose-600 scale-[0.98]' : 'bg-rose-500 text-white border-rose-700'}`}
-                  >
-                    {copWarning ? "LET GO NOW!!!" : "[ HOLD SPACEBAR ]"}
-                  </div>
-                  <p className={`text-sm md:text-lg font-bold mt-2 ${copWarning ? 'text-red-400 animate-pulse' : 'text-stone-400'}`}>
-                    Let go <span className={`${copWarning ? 'text-white bg-red-600' : 'text-red-400 bg-red-400/10'} px-2 py-0.5 rounded`}>IMMEDIATELY</span> if you see police!
-                  </p>
-                </div>
-              )}
-
+               {gameState === 'won' && (
+                 <div className="flex flex-col items-center z-10">
+                   <span className="text-6xl md:text-8xl mb-2 md:mb-4">🥰🎉</span>
+                   <p className="text-rose-400 font-bold tracking-widest uppercase text-xs md:text-xl drop-shadow-md">You safely survived the drive!</p>
+                 </div>
+               )}
             </div>
+
+            {/* Passion Progress Bar */}
+            <div className="w-full bg-[#0A0812] rounded-full h-6 md:h-8 mb-6 border-2 border-[#2D2442] relative overflow-hidden shadow-inner">
+               <div 
+                 className={`h-full transition-all duration-75 ${score === 100 ? 'bg-gradient-to-r from-emerald-500 to-green-400' : 'bg-gradient-to-r from-rose-600 to-pink-500'} shadow-[0_0_15px_rgba(244,63,94,0.5)]`} 
+                 style={{ width: `${score}%` }} 
+               />
+               <span className="absolute inset-0 flex items-center justify-center text-[10px] md:text-sm font-black tracking-widest text-white/60 uppercase drop-shadow-md mix-blend-difference">
+                 Passion Meter
+               </span>
+            </div>
+
+            {/* Controls */}
+            {gameState === 'idle' || gameState === 'caught' || gameState === 'won' ? (
+              <button 
+                onClick={startGame}
+                className="bg-gradient-to-r from-rose-500 to-rose-600 text-white px-8 py-3 md:px-12 md:py-5 rounded-full font-bold hover:from-rose-400 hover:to-rose-500 transition-all active:scale-95 shadow-[0_0_30px_rgba(244,63,94,0.4)] w-full md:w-auto text-base md:text-2xl tracking-wider border border-rose-400/30"
+              >
+                {gameState === 'idle' ? 'Start Game' : 'Try Again'}
+              </button>
+            ) : (
+              <div className="w-full flex flex-col items-center gap-2 md:gap-4 shrink-0">
+                <div
+                  className={`w-full py-3 md:py-6 rounded-xl md:rounded-2xl font-black text-base md:text-2xl tracking-widest uppercase transition-all select-none shadow-2xl border-b-4 md:border-b-8 ${copWarning ? 'bg-red-600 text-white border-red-800 scale-[0.98]' : isPressing ? 'bg-rose-400 text-white border-rose-600 scale-[0.98]' : 'bg-rose-500 text-white border-rose-700'}`}
+                >
+                  {copWarning ? "LET GO NOW!!!" : "[ HOLD SPACEBAR ]"}
+                </div>
+                <p className={`text-xs md:text-lg font-bold mt-1 md:mt-2 ${copWarning ? 'text-red-400 animate-pulse' : 'text-indigo-300'}`}>
+                  Let go <span className={`${copWarning ? 'text-white bg-red-600' : 'text-red-400 bg-red-400/10'} px-2 py-0.5 rounded`}>IMMEDIATELY</span> if you see police!
+                </p>
+              </div>
+            )}
+
           </div>
         </div>
       </div>
@@ -939,8 +937,11 @@ export default function App() {
       )}
 
       {appStep === 2 && (
-        <div className="min-h-screen bg-stone-50 text-gray-800 overflow-x-hidden relative selection:bg-rose-200 selection:text-rose-900 flex flex-col">
+        <div className="min-h-screen bg-[#FCFAFA] text-stone-800 overflow-x-hidden relative selection:bg-rose-200 selection:text-rose-900 flex flex-col">
           
+          {/* Subtle warm glow at the very top of the page */}
+          <div className="absolute top-0 left-0 w-full h-screen bg-gradient-to-b from-rose-50/80 to-transparent pointer-events-none z-0" />
+
           {/* Background Particles globally overlayed */}
           <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden mix-blend-multiply">
             {[...Array(20)].map((_, i) => (
@@ -980,7 +981,7 @@ export default function App() {
                 <p className="text-2xl text-rose-500 font-bold mb-8" style={{ fontFamily: "'Caveat', cursive" }}>Happy Birthday, beautiful! ❤️</p>
                 <button 
                   onClick={() => setShowPopup(false)}
-                  className="bg-rose-500 text-white px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(244,63,94,0.3)] hover:bg-rose-600 active:scale-95 transition-all w-full text-lg"
+                  className="bg-gradient-to-r from-rose-500 to-rose-600 text-white px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(244,63,94,0.3)] hover:from-rose-400 hover:to-rose-500 active:scale-95 transition-all w-full text-lg"
                 >
                   Close
                 </button>
@@ -989,27 +990,27 @@ export default function App() {
           )}
 
           {/* Hero Section */}
-          <header className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-10 bg-stone-50 z-10">
+          <header className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-10 z-10">
             <div 
-              className="absolute inset-0 bg-cover bg-center opacity-[0.12]"
+              className="absolute inset-0 bg-cover bg-center opacity-[0.10]"
               style={{ backgroundImage: `url(${ASSETS.images.hero})`, backgroundAttachment: 'fixed' }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-stone-50/70 via-stone-50/50 to-stone-50" />
+            <div className="absolute inset-0 bg-gradient-to-b from-stone-50/50 via-stone-50/20 to-stone-50 pointer-events-none" />
             
             <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center mt-[-5vh]">
               <div className="animate-[fade-in-up_1s_ease-out_forwards]">
                 <span className="inline-block py-2 px-8 rounded-full bg-white/90 backdrop-blur-sm text-rose-600 font-bold tracking-[0.25em] text-xs mb-10 shadow-sm border border-rose-100">
                   MARCH 15, 2026
                 </span>
-                <h2 className="text-4xl md:text-6xl text-rose-500 mb-4 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>
+                <h2 className="text-4xl md:text-6xl text-rose-500 mb-4 font-bold drop-shadow-sm" style={{ fontFamily: "'Caveat', cursive" }}>
                   Happy 25th Birthday
                 </h2>
                 
-                <div className="h-24 md:h-32 flex items-center justify-center">
+                <div className="min-h-[100px] sm:min-h-[120px] md:min-h-[160px] w-full flex items-center justify-center px-2">
                    <Typewriter words={["Kajori", "My Jaan", "My Love", "My Everything"]} />
                 </div>
                 
-                <p className="text-lg md:text-2xl text-stone-600 mb-8 max-w-2xl mx-auto leading-relaxed font-medium mt-6 px-4">
+                <p className="text-lg md:text-2xl text-stone-700 mb-8 max-w-2xl mx-auto leading-relaxed font-medium mt-6 px-4 drop-shadow-sm">
                   From swiping right and terrible Kannada translations, to airport jumping and parking lot conversations. Here is the story of us.
                 </p>
               </div>
@@ -1025,20 +1026,23 @@ export default function App() {
           </header>
 
           {/* Main Flow: Journey -> Mood -> Bridge -> Movie -> Game */}
-          <div className="w-full relative z-10 flex flex-col bg-stone-50">
+          <div className="w-full relative z-10 flex flex-col">
             
             {/* Story Timeline Button Section */}
             <main className="w-full px-4 py-28 md:py-40 flex flex-col items-center justify-center relative">
-              <div className="text-center mb-16 relative bg-stone-50/90 backdrop-blur-sm px-10 py-8 rounded-[3rem] shadow-sm border border-stone-100">
+              <div className="text-center mb-16 relative bg-white/80 backdrop-blur-md px-10 py-8 rounded-[3rem] shadow-sm border border-rose-50">
                 <h2 className="text-6xl md:text-7xl text-rose-900 font-bold" style={{ fontFamily: "'Caveat', cursive" }}>Our Journey</h2>
                 <div className="h-1.5 w-32 bg-rose-300 mx-auto mt-8 rounded-full opacity-60" />
-                <p className="mt-8 text-stone-500 font-medium text-xl">A look back at all our beautiful moments.</p>
+                <p className="mt-8 text-stone-600 font-medium text-xl">A look back at all our beautiful moments.</p>
               </div>
 
               {/* Absolute "Click Me!!!" Cloud Pointing Directly at the Button */}
               <div id="memory-btn-container" className="relative flex justify-center mt-6 mb-16">
                 {!hasOpenedMemoryLane && (
                   <div className="absolute bottom-[110%] right-0 md:-right-12 transform translate-y-2 pointer-events-none z-20 flex flex-col items-center animate-[bounce-slight_3s_ease-in-out_infinite]">
+                    <CloudBubble className="mb-2">
+                       Click Me!!!
+                    </CloudBubble>
                     <svg width="40" height="55" viewBox="0 0 60 100" fill="none" className="stroke-stone-700 ml-10" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M 30 0 C 50 20, -10 30, 10 50 C 30 70, 50 30, 20 70 C 5 90, 5 90, 5 90" />
                       <path d="M -5 75 L 5 90 L 20 85" />
@@ -1051,7 +1055,7 @@ export default function App() {
                     setShowSlideshow(true);
                     setHasOpenedMemoryLane(true);
                 }}
-                  className="bg-rose-500 text-white px-12 py-6 rounded-full font-bold text-xl md:text-3xl hover:bg-rose-600 transition-all shadow-[0_0_40px_rgba(225,29,72,0.3)] hover:shadow-[0_0_50px_rgba(225,29,72,0.5)] flex items-center gap-5 transform hover:scale-105 active:scale-95 relative z-10"
+                  className="bg-gradient-to-r from-rose-500 to-rose-600 text-white px-12 py-6 rounded-full font-bold text-xl md:text-3xl hover:from-rose-400 hover:to-rose-500 transition-all shadow-[0_10px_40px_rgba(225,29,72,0.3)] hover:shadow-[0_15px_50px_rgba(225,29,72,0.5)] flex items-center gap-5 transform hover:scale-105 active:scale-95 relative z-10 border border-rose-400/50"
                 >
                   <Play className="w-10 h-10 fill-current" />
                   Open The Memory Lane
@@ -1062,15 +1066,15 @@ export default function App() {
             <MoodSection />
 
             {/* --- NIGHT SKY WRAPPER --- */}
-            <div className="relative w-full overflow-hidden flex flex-col">
+            <div className="relative w-full overflow-hidden flex flex-col bg-[#0B0B1A]">
               <StarryBackground />
               
-              {/* Smooth Fade-in for the stars from the white background */}
-              <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-stone-50 to-transparent pointer-events-none z-0" />
+              {/* Smooth Dusk Fade-in: Transitions the bright stone-50 into the dark starry sky elegantly */}
+              <div className="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-[#FCFAFA] via-purple-950/40 to-transparent pointer-events-none z-0" />
 
               {/* Smooth Cinematic Bridge to Darkness */}
               <div className="w-full pt-48 pb-12 relative z-10 flex items-center justify-center text-center px-4">
-                <p className="text-4xl md:text-6xl text-stone-300 font-medium drop-shadow-xl leading-snug" style={{ fontFamily: "'Caveat', cursive" }}>
+                <p className="text-4xl md:text-6xl text-stone-200 font-medium drop-shadow-xl leading-snug" style={{ fontFamily: "'Caveat', cursive" }}>
                   But through the highs and the lows... <br/>
                   <span className="text-indigo-300 mt-6 inline-block drop-shadow-[0_0_15px_rgba(165,180,252,0.5)] font-bold">every single moment led up to this night.</span>
                 </p>
@@ -1082,20 +1086,20 @@ export default function App() {
               </div>
 
               {/* MASSIVE Dedicated Game Section */}
-              <div className="w-full relative z-10 pt-24 pb-40 flex flex-col items-center bg-gradient-to-b from-transparent via-[#130f1c] to-transparent">
+              <div className="w-full relative z-10 pt-24 pb-40 flex flex-col items-center bg-gradient-to-b from-transparent via-[#0f0c16] to-transparent">
                 <div className="text-center max-w-4xl px-4 mb-16">
                   <div className="inline-block p-6 bg-rose-500/10 rounded-full mb-8 backdrop-blur-md border border-rose-500/20 shadow-[0_0_30px_rgba(225,29,72,0.1)]">
                      <ShieldAlert className="w-16 h-16 text-rose-400 animate-pulse" />
                   </div>
                   <h2 className="text-6xl md:text-8xl text-rose-200 mb-8 drop-shadow-lg font-bold" style={{ fontFamily: "'Caveat', cursive" }}>The Long Drive Scare</h2>
                   <p className="text-indigo-200/90 text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mx-auto">
-                    Remember when we were outside of VET Ground? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
+                    Remember when we were parked outside of VET Ground? Let's see if you can sneak a kiss without getting caught by the cops this time! 😂
                   </p>
                 </div>
                 
                 <button 
                   onClick={() => setShowGame(true)}
-                  className="bg-rose-600 text-white px-16 py-8 rounded-full font-black text-2xl md:text-4xl hover:bg-rose-500 transition-all shadow-[0_0_60px_rgba(225,29,72,0.6)] hover:shadow-[0_0_80px_rgba(225,29,72,0.8)] flex items-center gap-6 transform hover:scale-105 active:scale-95 border-4 md:border-[6px] border-rose-400/30 group"
+                  className="bg-gradient-to-r from-rose-600 to-pink-600 text-white px-16 py-8 rounded-full font-black text-2xl md:text-4xl hover:from-rose-500 hover:to-pink-500 transition-all shadow-[0_0_60px_rgba(225,29,72,0.5)] hover:shadow-[0_0_80px_rgba(225,29,72,0.7)] flex items-center gap-6 transform hover:scale-105 active:scale-95 border-4 md:border-[6px] border-rose-400/40 group"
                 >
                   <Car className="w-12 h-12 md:w-14 md:h-14 fill-current group-hover:animate-bounce-slight" />
                   PLAY MINI-GAME
@@ -1104,16 +1108,16 @@ export default function App() {
             </div>
           </div>
 
-          {/* Gift Section (Fades from deep theater stone into rich red Zomato theme) */}
-          <section className="py-40 bg-gradient-to-b from-[#0B0B1A] to-rose-950 text-white text-center px-4 relative overflow-hidden z-10">
+          {/* Gift Section (Fades smoothly from the dark starry sky into a rich, deep velvet red for the Zomato theme) */}
+          <section className="py-40 bg-gradient-to-b from-[#0B0B1A] via-rose-950/80 to-red-950 text-white text-center px-4 relative overflow-hidden z-10">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none mix-blend-overlay">
-              <div className="absolute -top-1/4 -right-1/4 w-[600px] h-[600px] bg-red-800 rounded-full blur-[120px] opacity-40" />
-              <div className="absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] bg-red-800 rounded-full blur-[120px] opacity-40" />
+              <div className="absolute -top-1/4 -right-1/4 w-[600px] h-[600px] bg-red-600 rounded-full blur-[150px] opacity-30" />
+              <div className="absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] bg-red-600 rounded-full blur-[150px] opacity-30" />
             </div>
 
             <div className="max-w-4xl mx-auto relative z-10">
               <div className="inline-block p-6 bg-white/10 rounded-full mb-10 backdrop-blur-md border border-white/20 shadow-xl">
-                <Gift className="w-14 h-14 text-rose-300 animate-bounce" />
+                <Gift className="w-14 h-14 text-rose-200 animate-bounce" />
               </div>
               <h2 className="text-6xl md:text-8xl font-bold mb-8 text-white drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>
                 A Little Birthday Treat!
@@ -1125,15 +1129,15 @@ export default function App() {
               {!giftRevealed ? (
                 <button 
                   onClick={revealGift}
-                  className="bg-white text-rose-950 px-12 py-6 rounded-full font-black text-2xl hover:bg-rose-50 transition-all shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:shadow-[0_0_70px_rgba(255,255,255,0.5)] flex items-center justify-center gap-4 mx-auto transform hover:scale-110 active:scale-95"
+                  className="bg-white text-red-950 px-12 py-6 rounded-full font-black text-2xl hover:bg-rose-50 transition-all shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:shadow-[0_0_70px_rgba(255,255,255,0.5)] flex items-center justify-center gap-4 mx-auto transform hover:scale-110 active:scale-95"
                 >
                   <Sparkles className="w-8 h-8 text-yellow-500" />
                   Reveal Your Gift!
                 </button>
               ) : (
                 <div className="animate-[scale-in_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
-                  <div className="bg-gradient-to-br from-red-600 to-red-800 p-2 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.5)] max-w-lg mx-auto transform rotate-2 hover:rotate-0 transition-transform duration-500 cursor-pointer">
-                    <div className="bg-white text-stone-800 p-12 rounded-[2rem] border-4 border-dashed border-red-200/50 relative overflow-hidden">
+                  <div className="bg-gradient-to-br from-red-500 to-red-800 p-2 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.6)] max-w-lg mx-auto transform rotate-2 hover:rotate-0 transition-transform duration-500 cursor-pointer border border-red-400/30">
+                    <div className="bg-[#FAF9F6] text-stone-800 p-12 rounded-[2rem] border-4 border-dashed border-red-200/60 relative overflow-hidden">
                       <div className="absolute top-0 right-0 bg-red-600 text-white px-8 py-2 rounded-bl-3xl rounded-tr-[1.5rem] font-black text-sm tracking-[0.2em] shadow-md">
                         ZOMATO
                       </div>
@@ -1145,7 +1149,7 @@ export default function App() {
                       <h3 className="text-6xl font-black text-stone-900 mb-3 tracking-tighter">₹2,000</h3>
                       <p className="text-stone-500 font-bold text-lg mb-10 uppercase tracking-widest">Voucher to treat your cravings!</p>
                       
-                      <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-inner flex flex-col gap-5">
+                      <div className="bg-stone-100 p-6 rounded-2xl border border-stone-200 shadow-inner flex flex-col gap-5">
                         <div>
                           <p className="text-xs text-stone-400 uppercase tracking-[0.2em] mb-2 font-bold">16-Digit Gift Code</p>
                           <div className="bg-white py-3 rounded-xl border border-stone-200 shadow-sm">
@@ -1164,7 +1168,7 @@ export default function App() {
                       </div>
                     </div>
                   </div>
-                  <p className="mt-20 text-5xl text-rose-300 font-bold drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>
+                  <p className="mt-20 text-5xl md:text-6xl text-rose-300 font-bold drop-shadow-md" style={{ fontFamily: "'Caveat', cursive" }}>
                     I love you so much. Happy Birthday. ❤️
                   </p>
                 </div>
