@@ -752,6 +752,10 @@ export default function App() {
   const [showPopup, setShowPopup] = useState(false);
   const [showGame, setShowGame] = useState(false);
 
+  // Tease logic states
+  const [isTeasing, setIsTeasing] = useState(true);
+  const [teaseOffset, setTeaseOffset] = useState({ x: 0, y: 0 });
+
   const globalAudioRef = useRef(null);
   const [isAudioUnlocked, setIsAudioUnlocked] = useState(false);
 
@@ -790,12 +794,33 @@ export default function App() {
     }
   }, [showSlideshow, isAudioUnlocked, appStep]);
 
+  // Teasing logic timer
+  useEffect(() => {
+    if (appStep === 1) {
+      // She has to chase it for 10 seconds!
+      const timer = setTimeout(() => {
+        setIsTeasing(false);
+        setTeaseOffset({ x: 0, y: 0 }); // Reset to center
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [appStep]);
+
   const handlePreIntroClick = () => {
     if (globalAudioRef.current && !isAudioUnlocked) {
       globalAudioRef.current.volume = 0.3;
       globalAudioRef.current.play().then(() => setIsAudioUnlocked(true)).catch(() => {});
     }
     setAppStep(1);
+  };
+
+  const handleTease = () => {
+    if (isTeasing) {
+      // Moves button randomly within -30vw to 30vw and -30vh to 30vh range
+      const newX = (Math.random() - 0.5) * 60;
+      const newY = (Math.random() - 0.5) * 60;
+      setTeaseOffset({ x: newX, y: newY });
+    }
   };
 
   const handleIntroClick = () => {
@@ -920,17 +945,28 @@ export default function App() {
                 }}
               />
             ))}
-            {/* Dark Overlay to make sure text is still very readable */}
-            <div className="absolute inset-0 bg-stone-950/70 pointer-events-none" />
+            {/* Dark Overlay to make sure text is still very readable but let images shine */}
+            <div className="absolute inset-0 bg-stone-950/30 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-stone-950/60 via-transparent to-stone-950/80 pointer-events-none" />
           </div>
 
-          <div onClick={handleIntroClick} className="cursor-pointer group relative z-10 transform transition duration-500 hover:scale-105">
-            <div className="bg-white/95 backdrop-blur-xl p-10 md:p-14 rounded-3xl shadow-[0_0_60px_rgba(251,113,133,0.3)] border border-rose-200/50 text-center max-w-sm w-full">
-              <div className="bg-rose-100 w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-8 group-hover:bg-rose-200 transition-colors shadow-inner">
-                <Heart className="w-14 h-14 text-rose-500 heart-beat" fill="currentColor" />
+          <div 
+            className="relative z-10 transition-all duration-75 ease-in-out pointer-events-none"
+            style={{ transform: `translate(${teaseOffset.x}vw, ${teaseOffset.y}vh)` }}
+          >
+            <div className="flex flex-col items-center justify-center p-6 text-center">
+              <div 
+                onClick={handleIntroClick} 
+                onMouseEnter={handleTease}
+                onTouchStart={handleTease}
+                className="bg-rose-500/80 backdrop-blur-md w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_rgba(225,29,72,0.6)] border border-rose-300/30 hover:bg-rose-500 transition-colors cursor-pointer pointer-events-auto"
+              >
+                <Heart className="w-14 h-14 text-white heart-beat" fill="currentColor" />
               </div>
-              <h1 className="text-5xl text-rose-900 mb-3" style={{ fontFamily: "'Caveat', cursive" }}>For My Jaan</h1>
-              <p className="text-rose-400 font-bold uppercase tracking-[0.3em] text-xs">Tap to open</p>
+              <h1 className="text-6xl md:text-8xl text-white mb-4 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] pointer-events-none" style={{ fontFamily: "'Caveat', cursive" }}>For My Jaan</h1>
+              <p className="text-white font-bold uppercase tracking-[0.3em] text-xs md:text-sm bg-black/40 px-6 py-2 rounded-full backdrop-blur-sm border border-white/20 drop-shadow-md pointer-events-none">
+                {isTeasing ? "Catch the heart to open!" : "Tap the heart to open!"}
+              </p>
             </div>
           </div>
         </div>
@@ -1040,9 +1076,6 @@ export default function App() {
               <div id="memory-btn-container" className="relative flex justify-center mt-6 mb-16">
                 {!hasOpenedMemoryLane && (
                   <div className="absolute bottom-[110%] right-0 md:-right-12 transform translate-y-2 pointer-events-none z-20 flex flex-col items-center animate-[bounce-slight_3s_ease-in-out_infinite]">
-                    <CloudBubble className="mb-2">
-                       Click Me!!!
-                    </CloudBubble>
                     <svg width="40" height="55" viewBox="0 0 60 100" fill="none" className="stroke-stone-700 ml-10" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M 30 0 C 50 20, -10 30, 10 50 C 30 70, 50 30, 20 70 C 5 90, 5 90, 5 90" />
                       <path d="M -5 75 L 5 90 L 20 85" />
